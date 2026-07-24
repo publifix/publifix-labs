@@ -42,11 +42,12 @@ const steps = [
     <ol class="proceso__steps" data-proceso-steps>
       {steps.map((step) => (
         <li class="proceso__step">
-          <span class="proceso__step-number" data-proceso-number aria-hidden="true">{step.number}</span>
           <div class="proceso__step-copy">
+            <span class="proceso__step-number" aria-hidden="true">{step.number}</span>
             <h3 class="proceso__step-heading">{step.heading}</h3>
             <p class="proceso__step-body">{step.body}</p>
           </div>
+          <span class="proceso__marker" data-proceso-marker aria-hidden="true"></span>
         </li>
       ))}
     </ol>
@@ -123,40 +124,53 @@ const steps = [
   .proceso__step {
     display: grid;
     grid-template-columns: 1fr clamp(3.5rem, 9vw, 6rem) 1fr;
-    align-items: start;
+    align-items: center;
     gap: clamp(1rem, 3vw, 2rem);
   }
 
   .proceso__step-number {
-    grid-column: 2;
-    justify-self: center;
+    display: block;
     font-family: var(--font-sans);
     font-weight: 700;
-    font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+    font-size: clamp(3.25rem, 6.5vw, 5.5rem);
     line-height: 1;
-    letter-spacing: -0.01em;
-    text-align: center;
+    letter-spacing: -0.02em;
+    opacity: 0.22;
   }
 
-  :global(html.js) .proceso__step-number {
-    opacity: 0.25;
-    transition: opacity 0.4s var(--ease-premium);
+  .proceso__marker {
+    grid-column: 2;
+    justify-self: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    border: 2px solid var(--color-text);
+    background: var(--color-text);
+    box-sizing: border-box;
+    transition: background-color 0.35s var(--ease-premium), transform 0.35s var(--ease-premium);
   }
 
-  :global(html.js) .proceso__step-number.is-active {
-    opacity: 1;
+  :global(html.js) .proceso__marker {
+    background: var(--color-bg);
+  }
+
+  :global(html.js) .proceso__marker.is-filled {
+    background: var(--color-text);
+    transform: scale(1.2);
   }
 
   .proceso__step-copy {
     grid-column: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    align-items: flex-end;
+    gap: 0.5rem;
     text-align: right;
   }
 
   .proceso__step:nth-child(even) .proceso__step-copy {
     grid-column: 3;
+    align-items: flex-start;
     text-align: left;
   }
 
@@ -233,29 +247,30 @@ const steps = [
   }
 
   @media (max-width: 860px) {
-    .proceso__line {
+    .proceso__line,
+    .proceso__marker {
       display: none;
     }
 
     .proceso__step {
-      grid-template-columns: auto 1fr;
+      grid-template-columns: 1fr;
     }
 
     .proceso__step-number {
-      grid-column: 1;
-      justify-self: start;
+      font-size: clamp(2.75rem, 14vw, 3.75rem);
     }
 
     .proceso__step-copy,
     .proceso__step:nth-child(even) .proceso__step-copy {
-      grid-column: 2;
+      grid-column: 1;
+      align-items: flex-start;
       text-align: left;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :global(html.js) .proceso__step-number {
-      opacity: 1;
+    :global(html.js) .proceso__marker {
+      background: var(--color-text);
     }
   }
 </style>
@@ -272,11 +287,11 @@ const steps = [
   const stepsEl = document.querySelector<HTMLElement>('[data-proceso-steps]');
   const svg = document.querySelector<SVGSVGElement>('[data-proceso-line]');
   const line = document.querySelector<SVGLineElement>('[data-proceso-path]');
-  const numbers = Array.from(document.querySelectorAll<HTMLElement>('[data-proceso-number]'));
+  const markers = Array.from(document.querySelectorAll<HTMLElement>('[data-proceso-marker]'));
 
-  if (stepsEl && svg && line && numbers.length) {
+  if (stepsEl && svg && line && markers.length) {
     if (prefersReducedMotion || isCompactViewport) {
-      numbers.forEach((el) => el.classList.add('is-active'));
+      markers.forEach((el) => el.classList.add('is-filled'));
     } else {
       let length = 0;
       let offsets: number[] = [];
@@ -295,7 +310,7 @@ const steps = [
         line.style.strokeDashoffset = String(length);
 
         const stepsTop = stepsEl.getBoundingClientRect().top;
-        offsets = numbers.map((el) => {
+        offsets = markers.map((el) => {
           const r = el.getBoundingClientRect();
           return r.top - stepsTop + r.height / 2;
         });
@@ -313,7 +328,7 @@ const steps = [
         onUpdate(self) {
           const drawn = length * self.progress;
           line.style.strokeDashoffset = String(length - drawn);
-          numbers.forEach((el, i) => el.classList.toggle('is-active', drawn >= offsets[i]));
+          markers.forEach((el, i) => el.classList.toggle('is-filled', drawn >= offsets[i]));
         },
       });
 
