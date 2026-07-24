@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
+import Insight from '../components/Insight.astro';
 ---
 
 <Layout
@@ -10,4 +11,113 @@ import Hero from '../components/Hero.astro';
 >
   <Header />
   <Hero />
+  <Insight />
 </Layout>
+
+<script>
+  // Hero -> Insight video dock: the background video shrinks from a
+  // full-bleed hero layer into the small portrait frame inside the Insight
+  // section, scrubbed directly to scroll position (GSAP ScrollTrigger,
+  // scrub: true — no one-shot trigger). This spans two components, so it
+  // lives here where both are already mounted.
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const heroSection = document.querySelector<HTMLElement>('.hero');
+  const heroMedia = document.querySelector<HTMLElement>('[data-hero-media]');
+  const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  const overlay = document.querySelector<HTMLElement>('[data-hero-overlay]');
+  const slot = document.querySelector<HTMLElement>('[data-video-slot]');
+  const insightSection = document.querySelector<HTMLElement>('.insight');
+  const scrollIndicator = document.querySelector<HTMLElement>('[data-scroll-indicator]');
+
+  if (heroSection && heroMedia && video && slot && insightSection) {
+    const DOCK_RADIUS = 28; // px — matches .insight__media's resting border-radius
+
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+    type Mode = 'hero' | 'transit' | 'docked';
+    let mode: Mode = 'hero';
+
+    const enterTransit = () => {
+      if (mode === 'transit') return;
+      mode = 'transit';
+      video.style.position = 'fixed';
+      video.style.zIndex = '20';
+      video.style.pointerEvents = 'none';
+    };
+
+    const enterDocked = () => {
+      mode = 'docked';
+      slot.appendChild(video);
+      video.style.position = 'absolute';
+      video.style.inset = '0';
+      video.style.top = '';
+      video.style.left = '';
+      video.style.width = '100%';
+      video.style.height = '100%';
+      video.style.borderRadius = `${DOCK_RADIUS}px`;
+      if (overlay) overlay.style.opacity = '0';
+    };
+
+    const enterHeroResting = () => {
+      mode = 'hero';
+      heroMedia.appendChild(video);
+      video.style.position = 'absolute';
+      video.style.inset = '0';
+      video.style.top = '';
+      video.style.left = '';
+      video.style.width = '100%';
+      video.style.height = '100%';
+      video.style.borderRadius = '0';
+      if (overlay) overlay.style.opacity = '0.42';
+    };
+
+    const applyTransitRect = (progress: number) => {
+      const slotRect = slot.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      video.style.top = `${lerp(0, slotRect.top, progress)}px`;
+      video.style.left = `${lerp(0, slotRect.left, progress)}px`;
+      video.style.width = `${lerp(vw, slotRect.width, progress)}px`;
+      video.style.height = `${lerp(vh, slotRect.height, progress)}px`;
+      video.style.borderRadius = `${lerp(0, DOCK_RADIUS, progress)}px`;
+
+      if (overlay) overlay.style.opacity = String(0.42 * (1 - progress));
+      if (scrollIndicator) scrollIndicator.classList.toggle('is-dimmed', progress > 0.02);
+    };
+
+    if (prefersReducedMotion) {
+      // No scrub choreography: snap instantly between the two resting
+      // states based on whether the Insight section is the one in view.
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) enterDocked();
+          else enterHeroResting();
+        },
+        { rootMargin: '-50% 0px -50% 0px' }
+      );
+      observer.observe(insightSection);
+      scrollIndicator?.classList.add('is-dimmed');
+    } else {
+      ScrollTrigger.create({
+        trigger: heroSection,
+        start: 'top top',
+        end: () => `+=${window.innerHeight}`,
+        scrub: true,
+        invalidateOnRefresh: true,
+        onUpdate(self) {
+          enterTransit();
+          applyTransitRect(self.progress);
+        },
+        onLeave: enterDocked,
+        onLeaveBack: enterHeroResting,
+      });
+    }
+  }
+</script>
