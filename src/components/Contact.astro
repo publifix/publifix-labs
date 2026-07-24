@@ -1,0 +1,692 @@
+---
+const bullets = [
+  'Tomamos pocos proyectos a la vez — trabajo enfocado, no producción en serie.',
+  'Trae tus números o solo tu idea. Nos sirve para ir directo al punto.',
+  'En los primeros minutos sabrás si encajamos.',
+  'Trae a quien deba decidir contigo — ahorra una segunda llamada.',
+];
+
+const timeSlots = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00'];
+---
+
+<section class="contacto" id="contacto" aria-labelledby="contacto-heading">
+  <div class="contacto__grid">
+    <div class="contacto__intro">
+      <p class="contacto__eyebrow">Contacto</p>
+      <h2 class="contacto__headline" id="contacto-heading">Hablemos de lo que estás construyendo.</h2>
+      <p class="contacto__subtext">Llamada de 30 minutos, sin compromiso.</p>
+      <ul class="contacto__bullets">
+        {bullets.map((bullet) => (
+          <li>{bullet}</li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="contacto__card" data-contacto-card>
+      <!-- Step 1: date + time preference -->
+      <div class="contacto__step" data-step="calendar">
+        <p class="contacto__step-label">Elige una fecha y hora de preferencia</p>
+
+        <div class="contacto__calendar-head">
+          <button type="button" class="contacto__cal-nav" data-cal-prev aria-label="Mes anterior" disabled>‹</button>
+          <span class="contacto__cal-month" data-cal-month-label></span>
+          <button type="button" class="contacto__cal-nav" data-cal-next aria-label="Mes siguiente">›</button>
+        </div>
+
+        <div class="contacto__weekdays" aria-hidden="true">
+          <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+        </div>
+
+        <div class="contacto__days" data-cal-grid role="grid" aria-label="Selecciona un día"></div>
+
+        <div class="contacto__slots" data-slots hidden>
+          <p class="contacto__slots-label">Horarios disponibles</p>
+          <div class="contacto__slots-grid" data-slots-grid>
+            {timeSlots.map((slot) => (
+              <button type="button" class="contacto__slot" data-slot={slot}>{slot}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: form -->
+      <div class="contacto__step" data-step="form" hidden>
+        <div class="contacto__selected">
+          <div>
+            <p class="contacto__selected-label">Tu preferencia</p>
+            <p class="contacto__selected-value" data-selected-value>—</p>
+          </div>
+          <button type="button" class="contacto__change" data-change-slot>Cambiar</button>
+        </div>
+
+        <form class="contacto__form" data-contacto-form novalidate>
+          <div class="contacto__field">
+            <label for="contacto-nombre">Nombre</label>
+            <input id="contacto-nombre" name="nombre" type="text" autocomplete="name" required />
+          </div>
+
+          <div class="contacto__field">
+            <label for="contacto-email">Email</label>
+            <input id="contacto-email" name="email" type="email" autocomplete="email" required />
+          </div>
+
+          <div class="contacto__field-row">
+            <div class="contacto__field">
+              <label for="contacto-telefono">Teléfono <span class="contacto__optional">(opcional)</span></label>
+              <input id="contacto-telefono" name="telefono" type="tel" autocomplete="tel" />
+            </div>
+
+            <div class="contacto__field">
+              <label for="contacto-empresa">Empresa o industria</label>
+              <input id="contacto-empresa" name="empresa" type="text" required />
+            </div>
+          </div>
+
+          <div class="contacto__field">
+            <label for="contacto-sitio">Sitio web actual <span class="contacto__optional">(opcional)</span></label>
+            <input
+              id="contacto-sitio"
+              name="sitio"
+              type="text"
+              placeholder="Déjalo en blanco si no tienes uno"
+            />
+          </div>
+
+          <div class="contacto__field">
+            <label for="contacto-notas">Notas adicionales <span class="contacto__optional">(opcional)</span></label>
+            <textarea id="contacto-notas" name="notas" rows="3"></textarea>
+          </div>
+
+          <input type="hidden" name="preferencia" data-preferencia-input />
+
+          <button type="submit" class="contacto__submit" data-submit-button>
+            <span data-submit-label>Solicitar llamada →</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Confirmation -->
+      <div class="contacto__step contacto__step--success" data-step="success" hidden>
+        <p class="contacto__success">
+          Recibimos tu solicitud. Te contactaremos en menos de 24 horas para confirmar el horario de tu llamada.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contacto {
+    position: relative;
+    background: var(--color-text);
+    color: var(--color-bg);
+    padding: clamp(5.5rem, 11vw, 9rem) clamp(1.5rem, 6vw, 4rem);
+  }
+
+  .contacto__grid {
+    max-width: 76rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(3rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .contacto__intro {
+    position: sticky;
+    top: clamp(6rem, 10vw, 8rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .contacto__eyebrow {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .contacto__headline {
+    margin: 0;
+    max-width: 18ch;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.875rem, 3.8vw, 2.875rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .contacto__subtext {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    opacity: 0.75;
+  }
+
+  .contacto__bullets {
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .contacto__bullets li {
+    position: relative;
+    padding-left: 1.4rem;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    opacity: 0.8;
+  }
+
+  .contacto__bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: 0.6;
+  }
+
+  .contacto__card {
+    position: relative;
+    background: var(--color-bg);
+    color: var(--color-text);
+    border-radius: 28px;
+    padding: clamp(1.75rem, 3.5vw, 2.75rem);
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(20, 19, 14, 0.18);
+  }
+
+  .contacto__step {
+    transition: opacity 0.35s var(--ease-premium);
+  }
+
+  .contacto__step-label {
+    margin: 0 0 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    opacity: 0.7;
+  }
+
+  .contacto__calendar-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .contacto__cal-month {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1.0625rem;
+    text-transform: capitalize;
+  }
+
+  .contacto__cal-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 252, 233, 0.25);
+    background: none;
+    color: var(--color-text);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s var(--ease-premium), opacity 0.2s var(--ease-premium);
+  }
+
+  .contacto__cal-nav:hover:not(:disabled),
+  .contacto__cal-nav:focus-visible:not(:disabled) {
+    background: rgba(255, 252, 233, 0.12);
+  }
+
+  .contacto__cal-nav:disabled {
+    opacity: 0.25;
+    cursor: default;
+  }
+
+  .contacto__weekdays,
+  .contacto__days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .contacto__weekdays {
+    margin-bottom: 0.35rem;
+  }
+
+  .contacto__weekdays span {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    opacity: 0.5;
+    padding-bottom: 0.4rem;
+  }
+
+  .contacto__days :global(button),
+  .contacto__days :global(span) {
+    aspect-ratio: 1;
+  }
+
+  .contacto__days :global(button) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px 0;
+    border: none;
+    border-radius: 999px;
+    background: none;
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s var(--ease-premium), color 0.2s var(--ease-premium);
+  }
+
+  .contacto__days :global(button:hover:not(:disabled)),
+  .contacto__days :global(button:focus-visible:not(:disabled)) {
+    background: rgba(255, 252, 233, 0.14);
+  }
+
+  .contacto__days :global(button:disabled) {
+    opacity: 0.22;
+    cursor: default;
+  }
+
+  .contacto__days :global(button.is-selected) {
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-weight: 600;
+  }
+
+  .contacto__slots {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 252, 233, 0.16);
+  }
+
+  .contacto__slots-label {
+    margin: 0 0 0.85rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    opacity: 0.7;
+  }
+
+  .contacto__slots-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+
+  .contacto__slot {
+    padding: 0.75em 1em;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 252, 233, 0.22);
+    background: none;
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s var(--ease-premium), border-color 0.2s var(--ease-premium);
+  }
+
+  .contacto__slot:hover,
+  .contacto__slot:focus-visible {
+    background: rgba(255, 252, 233, 0.1);
+    border-color: rgba(255, 252, 233, 0.4);
+  }
+
+  .contacto__selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 14px;
+    background: rgba(255, 252, 233, 0.06);
+    border: 1px solid rgba(255, 252, 233, 0.16);
+  }
+
+  .contacto__selected-label {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+
+  .contacto__selected-value {
+    margin: 0.2rem 0 0;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .contacto__change {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-text);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    opacity: 0.75;
+    cursor: pointer;
+    transition: opacity 0.2s var(--ease-premium);
+  }
+
+  .contacto__change:hover,
+  .contacto__change:focus-visible {
+    opacity: 1;
+  }
+
+  .contacto__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .contacto__field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+  }
+
+  .contacto__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .contacto__field label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    opacity: 0.75;
+  }
+
+  .contacto__optional {
+    font-weight: 400;
+    opacity: 0.7;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  .contacto__field input,
+  .contacto__field textarea {
+    width: 100%;
+    padding: 0.75em 0.9em;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 252, 233, 0.22);
+    background: rgba(255, 252, 233, 0.06);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    transition: border-color 0.2s var(--ease-premium), background-color 0.2s var(--ease-premium);
+  }
+
+  .contacto__field input::placeholder,
+  .contacto__field textarea::placeholder {
+    color: var(--color-text);
+    opacity: 0.4;
+  }
+
+  .contacto__field input:focus-visible,
+  .contacto__field textarea:focus-visible {
+    outline: none;
+    border-color: rgba(255, 252, 233, 0.55);
+    background: rgba(255, 252, 233, 0.1);
+  }
+
+  .contacto__field textarea {
+    resize: vertical;
+    min-height: 5rem;
+  }
+
+  .contacto__submit {
+    margin-top: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1em 1.5em;
+    border-radius: 999px;
+    border: none;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s var(--ease-premium), transform 0.2s var(--ease-premium);
+  }
+
+  .contacto__submit:hover:not(:disabled) {
+    opacity: 0.88;
+  }
+
+  .contacto__submit:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  .contacto__step--success:not([hidden]) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 18rem;
+    text-align: center;
+  }
+
+  .contacto__success {
+    margin: 0;
+    max-width: 30ch;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1.375rem;
+    line-height: 1.4;
+    letter-spacing: -0.005em;
+  }
+
+  @media (max-width: 860px) {
+    .contacto__grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .contacto__intro {
+      position: static;
+    }
+
+    .contacto__field-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const card = document.querySelector<HTMLElement>('[data-contacto-card]');
+  const calGrid = document.querySelector<HTMLElement>('[data-cal-grid]');
+  const monthLabel = document.querySelector<HTMLElement>('[data-cal-month-label]');
+  const prevBtn = document.querySelector<HTMLButtonElement>('[data-cal-prev]');
+  const nextBtn = document.querySelector<HTMLButtonElement>('[data-cal-next]');
+  const slotsPanel = document.querySelector<HTMLElement>('[data-slots]');
+  const slotButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-slot]'));
+  const selectedValue = document.querySelector<HTMLElement>('[data-selected-value]');
+  const changeSlotBtn = document.querySelector<HTMLButtonElement>('[data-change-slot]');
+  const form = document.querySelector<HTMLFormElement>('[data-contacto-form]');
+  const preferenciaInput = document.querySelector<HTMLInputElement>('[data-preferencia-input]');
+  const submitButton = document.querySelector<HTMLButtonElement>('[data-submit-button]');
+  const submitLabel = document.querySelector<HTMLElement>('[data-submit-label]');
+
+  if (
+    card &&
+    calGrid &&
+    monthLabel &&
+    prevBtn &&
+    nextBtn &&
+    slotsPanel &&
+    slotButtons.length &&
+    selectedValue &&
+    changeSlotBtn &&
+    form &&
+    preferenciaInput &&
+    submitButton &&
+    submitLabel
+  ) {
+    const MONTH_NAMES = [
+      'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+      'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre',
+    ];
+    const DAY_ABBR = ['Dom', 'Lun', 'Mar', 'Miér', 'Jue', 'Vie', 'Sáb'];
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const baseYear = today.getFullYear();
+    const baseMonth = today.getMonth();
+
+    let monthOffset = 0; // 0 = current month, 1 = next month (the only two allowed)
+    let selectedDate: Date | null = null;
+    let selectedSlot: string | null = null;
+
+    const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
+
+    const isSameDay = (a: Date, b: Date) =>
+      a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+
+    const renderCalendar = () => {
+      const year = baseMonth + monthOffset > 11 ? baseYear + 1 : baseYear;
+      const month = (baseMonth + monthOffset) % 12;
+
+      monthLabel.textContent = `${MONTH_NAMES[month]} ${year}`;
+      prevBtn.disabled = monthOffset === 0;
+      nextBtn.disabled = monthOffset === 1;
+
+      calGrid.innerHTML = '';
+
+      const firstWeekday = (new Date(year, month, 1).getDay() + 6) % 7; // Monday-first
+      for (let i = 0; i < firstWeekday; i++) {
+        const blank = document.createElement('span');
+        calGrid.appendChild(blank);
+      }
+
+      const total = daysInMonth(year, month);
+      for (let day = 1; day <= total; day++) {
+        const date = new Date(year, month, day);
+        const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+        const isPast = date < today;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = String(day);
+        btn.disabled = isWeekend || isPast;
+        if (selectedDate && isSameDay(date, selectedDate)) {
+          btn.classList.add('is-selected');
+        }
+        btn.setAttribute('aria-label', `${day} de ${MONTH_NAMES[month]}`);
+
+        btn.addEventListener('click', () => {
+          selectedDate = date;
+          selectedSlot = null;
+          renderCalendar();
+          slotsPanel.hidden = false;
+          slotButtons.forEach((s) => s.classList.remove('is-selected'));
+        });
+
+        calGrid.appendChild(btn);
+      }
+    };
+
+    prevBtn.addEventListener('click', () => {
+      if (monthOffset > 0) {
+        monthOffset -= 1;
+        renderCalendar();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (monthOffset < 1) {
+        monthOffset += 1;
+        renderCalendar();
+      }
+    });
+
+    const crossfade = (hideEl: HTMLElement | null, showEl: HTMLElement) => {
+      const finish = () => {
+        showEl.hidden = false;
+        showEl.style.opacity = '0';
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            showEl.style.opacity = '1';
+          });
+        });
+      };
+
+      if (hideEl) {
+        hideEl.style.opacity = '0';
+        window.setTimeout(() => {
+          hideEl.hidden = true;
+          hideEl.style.opacity = '';
+          finish();
+        }, 260);
+      } else {
+        finish();
+      }
+    };
+
+    const stepCalendar = card.querySelector<HTMLElement>('[data-step="calendar"]');
+    const stepForm = card.querySelector<HTMLElement>('[data-step="form"]');
+    const stepSuccess = card.querySelector<HTMLElement>('[data-step="success"]');
+
+    slotButtons.forEach((slotBtn) => {
+      slotBtn.addEventListener('click', () => {
+        if (!selectedDate) return;
+        selectedSlot = slotBtn.dataset.slot ?? null;
+
+        const label = `${DAY_ABBR[selectedDate.getDay()]}, ${selectedDate.getDate()} de ${MONTH_NAMES[selectedDate.getMonth()]}, ${selectedSlot}`;
+        selectedValue.textContent = label;
+        preferenciaInput.value = label;
+
+        crossfade(stepCalendar, stepForm!);
+      });
+    });
+
+    changeSlotBtn.addEventListener('click', () => {
+      crossfade(stepForm, stepCalendar!);
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      submitButton.disabled = true;
+      submitLabel.textContent = 'Enviando…';
+
+      // No backend yet — this simulates the request and only shows the
+      // success state client-side.
+      window.setTimeout(() => {
+        crossfade(stepForm, stepSuccess!);
+        submitButton.disabled = false;
+        submitLabel.textContent = 'Solicitar llamada →';
+      }, 600);
+    });
+
+    renderCalendar();
+  }
+</script>

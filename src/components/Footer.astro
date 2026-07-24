@@ -1,0 +1,36 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <p class="site-footer__brand">Publifix Labs</p>
+  <p class="site-footer__copy">© {year} Publifix Labs. Todos los derechos reservados.</p>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-bg);
+    color: var(--color-text);
+    padding: clamp(2rem, 5vw, 2.75rem) clamp(1.5rem, 6vw, 4rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(255, 252, 233, 0.14);
+  }
+
+  .site-footer__brand {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    letter-spacing: -0.005em;
+  }
+
+  .site-footer__copy {
+    margin: 0;
+    font-size: 0.8125rem;
+    opacity: 0.6;
+  }
+</style>
