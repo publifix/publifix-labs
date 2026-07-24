@@ -1,0 +1,326 @@
+---
+const steps = [
+  {
+    number: '01',
+    heading: 'El diagnóstico',
+    body: 'Antes del diseño, entendemos el negocio. Qué vendes, a quién, qué ha funcionado y qué no — y dónde está la oportunidad real.',
+  },
+  {
+    number: '02',
+    heading: 'La arquitectura',
+    body: 'Definimos qué necesita existir y por qué: estructura, contenido, funcionalidades. El plano antes del ladrillo.',
+  },
+  {
+    number: '03',
+    heading: 'El diseño',
+    body: 'Dirección visual propia, no una plantilla ajustada. Cada decisión de color, tipografía y movimiento responde a tu marca, no a una tendencia.',
+  },
+  {
+    number: '04',
+    heading: 'El desarrollo',
+    body: 'Código, integración e inteligencia artificial donde suma valor real — no como adorno. Construimos, probamos, ajustamos.',
+  },
+  {
+    number: '05',
+    heading: 'El lanzamiento',
+    body: 'No es una presentación. Es un sitio funcionando, medido desde el primer día, listo para leer sus propios números.',
+  },
+];
+---
+
+<section class="proceso" id="proceso" aria-labelledby="proceso-heading">
+  <div class="proceso__intro">
+    <p class="proceso__eyebrow">Proceso</p>
+    <h2 class="proceso__headline" id="proceso-heading">Así se construye. Sin teatro de agencia.</h2>
+  </div>
+
+  <div class="proceso__timeline" data-proceso-timeline>
+    <svg class="proceso__line" data-proceso-line aria-hidden="true">
+      <line data-proceso-path stroke="currentColor" stroke-width="1.5" />
+    </svg>
+
+    <ol class="proceso__steps" data-proceso-steps>
+      {steps.map((step) => (
+        <li class="proceso__step">
+          <span class="proceso__step-number" data-proceso-number aria-hidden="true">{step.number}</span>
+          <div class="proceso__step-copy">
+            <h3 class="proceso__step-heading">{step.heading}</h3>
+            <p class="proceso__step-body">{step.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <div class="proceso__closing">
+    <p class="proceso__closing-eyebrow">Empezar</p>
+    <h3 class="proceso__closing-headline">¿Listo para comenzar?</h3>
+    <p class="proceso__closing-subtext">La primera llamada es el diagnóstico. De ahí avanzamos.</p>
+    <a href="#contacto" class="proceso__cta">Agendar diagnóstico →</a>
+  </div>
+</section>
+
+<style>
+  .proceso {
+    position: relative;
+    background: var(--color-bg);
+    color: var(--color-text);
+    padding: clamp(5.5rem, 11vw, 9rem) clamp(1.5rem, 6vw, 4rem);
+  }
+
+  .proceso__intro {
+    max-width: 60rem;
+    margin: 0 auto clamp(4rem, 8vw, 6rem);
+  }
+
+  .proceso__eyebrow {
+    margin: 0 0 0.9rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .proceso__headline {
+    margin: 0;
+    max-width: 22ch;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .proceso__timeline {
+    position: relative;
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+
+  .proceso__line {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--color-text);
+    opacity: 0.9;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .proceso__steps {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3rem, 7vw, 5.5rem);
+  }
+
+  .proceso__step {
+    display: grid;
+    grid-template-columns: 1fr clamp(3.5rem, 9vw, 6rem) 1fr;
+    align-items: start;
+    gap: clamp(1rem, 3vw, 2rem);
+  }
+
+  .proceso__step-number {
+    grid-column: 2;
+    justify-self: center;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    text-align: center;
+  }
+
+  :global(html.js) .proceso__step-number {
+    opacity: 0.25;
+    transition: opacity 0.4s var(--ease-premium);
+  }
+
+  :global(html.js) .proceso__step-number.is-active {
+    opacity: 1;
+  }
+
+  .proceso__step-copy {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    text-align: right;
+  }
+
+  .proceso__step:nth-child(even) .proceso__step-copy {
+    grid-column: 3;
+    text-align: left;
+  }
+
+  .proceso__step-heading {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.125rem, 2vw, 1.375rem);
+    letter-spacing: -0.005em;
+  }
+
+  .proceso__step-body {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    opacity: 0.78;
+  }
+
+  .proceso__closing {
+    max-width: 34rem;
+    margin: clamp(5rem, 10vw, 7.5rem) auto 0;
+    padding-top: clamp(3rem, 6vw, 4.5rem);
+    border-top: 1px solid rgba(255, 252, 233, 0.16);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .proceso__closing-eyebrow {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .proceso__closing-headline {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.5rem, 3vw, 2.125rem);
+    letter-spacing: -0.01em;
+  }
+
+  .proceso__closing-subtext {
+    margin: 0;
+    max-width: 32ch;
+    font-size: 1rem;
+    line-height: 1.55;
+    opacity: 0.75;
+  }
+
+  .proceso__cta {
+    margin-top: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 1em 2.2em;
+    border-radius: 999px;
+    border: 1px solid var(--color-text);
+    color: var(--color-text);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.3s var(--ease-premium), color 0.3s var(--ease-premium);
+  }
+
+  .proceso__cta:hover,
+  .proceso__cta:focus-visible {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  @media (max-width: 860px) {
+    .proceso__line {
+      display: none;
+    }
+
+    .proceso__step {
+      grid-template-columns: auto 1fr;
+    }
+
+    .proceso__step-number {
+      grid-column: 1;
+      justify-self: start;
+    }
+
+    .proceso__step-copy,
+    .proceso__step:nth-child(even) .proceso__step-copy {
+      grid-column: 2;
+      text-align: left;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .proceso__step-number {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isCompactViewport = window.matchMedia('(max-width: 860px)').matches;
+
+  const stepsEl = document.querySelector<HTMLElement>('[data-proceso-steps]');
+  const svg = document.querySelector<SVGSVGElement>('[data-proceso-line]');
+  const line = document.querySelector<SVGLineElement>('[data-proceso-path]');
+  const numbers = Array.from(document.querySelectorAll<HTMLElement>('[data-proceso-number]'));
+
+  if (stepsEl && svg && line && numbers.length) {
+    if (prefersReducedMotion || isCompactViewport) {
+      numbers.forEach((el) => el.classList.add('is-active'));
+    } else {
+      let length = 0;
+      let offsets: number[] = [];
+
+      const measure = () => {
+        const height = Math.ceil(stepsEl.getBoundingClientRect().height);
+        svg.setAttribute('width', '3');
+        svg.setAttribute('height', String(height));
+        line.setAttribute('x1', '1.5');
+        line.setAttribute('y1', '0');
+        line.setAttribute('x2', '1.5');
+        line.setAttribute('y2', String(height));
+
+        length = line.getTotalLength();
+        line.style.strokeDasharray = String(length);
+        line.style.strokeDashoffset = String(length);
+
+        const stepsTop = stepsEl.getBoundingClientRect().top;
+        offsets = numbers.map((el) => {
+          const r = el.getBoundingClientRect();
+          return r.top - stepsTop + r.height / 2;
+        });
+      };
+
+      measure();
+
+      const trigger = ScrollTrigger.create({
+        trigger: stepsEl,
+        start: 'top center',
+        end: 'bottom center',
+        scrub: true,
+        invalidateOnRefresh: true,
+        onRefresh: measure,
+        onUpdate(self) {
+          const drawn = length * self.progress;
+          line.style.strokeDashoffset = String(length - drawn);
+          numbers.forEach((el, i) => el.classList.toggle('is-active', drawn >= offsets[i]));
+        },
+      });
+
+      // Fonts/images can still settle a beat after first load, which shifts
+      // step positions slightly — one clean refresh once everything is
+      // definitely done keeps the line-to-number sync accurate.
+      window.addEventListener('load', () => trigger.refresh());
+    }
+  }
+</script>
