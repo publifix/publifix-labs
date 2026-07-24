@@ -1,0 +1,461 @@
+---
+import { Image, getImage } from 'astro:assets';
+import newYouWellness from '../assets/images/work/new-you-wellness-center.png';
+import veluminen from '../assets/images/work/veluminen.png';
+import publifix from '../assets/images/work/publifix.png';
+import vinedosKando from '../assets/images/work/vinedos-kando.png';
+import theGrandLounge from '../assets/images/work/the-grand-lounge-elite.png';
+import draco from '../assets/images/work/draco.png';
+
+const rawProjects = [
+  {
+    name: 'New You Wellness Center',
+    category: 'Sitios web',
+    description:
+      'Sitio web para una clínica de bienestar en Houston, con quiz de inteligencia artificial que perfila leads en tiempo real y un panel administrador para gestión de contenido y citas.',
+    image: newYouWellness,
+  },
+  {
+    name: 'Veluminen',
+    category: 'E-commerce',
+    description:
+      'Tienda en línea de velas artesanales con checkout optimizado y un motor de blog automatizado por IA que genera contenido de forma continua, sin intervención manual.',
+    image: veluminen,
+  },
+  {
+    name: 'Publifix',
+    category: 'Software a medida',
+    description:
+      'Plataforma SaaS de distribución de boletines de prensa impulsada por IA, que conecta historias con los medios de comunicación relevantes en segundos.',
+    image: publifix,
+  },
+  {
+    name: "Viñedos K'ando",
+    category: 'Sitios web',
+    description:
+      'Sitio web responsivo para un viñedo en el Valle de Bernal, Querétaro — diseño inmersivo enfocado en experiencia y reservaciones.',
+    image: vinedosKando,
+  },
+  {
+    name: 'The Grand Lounge Elite',
+    category: 'E-commerce',
+    description:
+      'E-commerce y motor de reservaciones para la sala VIP más reconocida de Norteamérica, en alianza con Priority Pass — acceso, disponibilidad y pagos en un solo flujo.',
+    image: theGrandLounge,
+  },
+  {
+    name: 'Draco',
+    category: 'Agentes de IA',
+    description:
+      'Infraestructura de inteligencia artificial para análisis político: detecta crisis narrativas, mide momentum real y revela ventanas de oportunidad antes de que se vuelvan visibles.',
+    image: draco,
+  },
+];
+
+const projects = await Promise.all(
+  rawProjects.map(async (project) => {
+    const full = await getImage({ src: project.image, width: 1400 });
+    return { ...project, fullSrc: full.src };
+  })
+);
+---
+
+<section class="trabajo" id="trabajo" aria-labelledby="trabajo-heading">
+  <div class="trabajo__intro">
+    <p class="trabajo__eyebrow">Trabajo</p>
+    <h2 class="trabajo__headline" id="trabajo-heading">Proyectos que ya están en producción.</h2>
+  </div>
+
+  <div class="trabajo__grid">
+    {projects.map((project) => (
+      <button
+        type="button"
+        class="trabajo__card"
+        data-trabajo-card
+        data-name={project.name}
+        data-category={project.category}
+        data-description={project.description}
+        data-full-src={project.fullSrc}
+      >
+        <span class="trabajo__thumb">
+          <Image
+            src={project.image}
+            alt={`Captura del proyecto ${project.name}`}
+            width={760}
+            loading="lazy"
+          />
+          <span class="trabajo__thumb-overlay" aria-hidden="true">
+            <span class="trabajo__thumb-name">{project.name}</span>
+          </span>
+        </span>
+        <span class="trabajo__meta">
+          <span class="trabajo__meta-name">{project.name}</span>
+          <span class="trabajo__meta-category">{project.category}</span>
+        </span>
+      </button>
+    ))}
+  </div>
+</section>
+
+<div class="lightbox" data-lightbox aria-hidden="true">
+  <div class="lightbox__backdrop" data-lightbox-backdrop></div>
+  <div class="lightbox__panel" role="dialog" aria-modal="true" aria-labelledby="lightbox-name">
+    <button type="button" class="lightbox__close" data-lightbox-close aria-label="Cerrar">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <path d="M1 1L17 17M17 1L1 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+    </button>
+    <div class="lightbox__image-wrap">
+      <img class="lightbox__image" data-lightbox-image src="" alt="" />
+    </div>
+    <div class="lightbox__info">
+      <p class="lightbox__category" data-lightbox-category></p>
+      <h3 class="lightbox__name" id="lightbox-name" data-lightbox-name></h3>
+      <p class="lightbox__description" data-lightbox-description></p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .trabajo {
+    position: relative;
+    background: var(--color-text);
+    color: var(--color-bg);
+    padding: clamp(5.5rem, 11vw, 9rem) clamp(1.5rem, 6vw, 4rem);
+  }
+
+  .trabajo__intro {
+    max-width: 60rem;
+    margin: 0 auto clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .trabajo__eyebrow {
+    margin: 0 0 0.9rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .trabajo__headline {
+    margin: 0;
+    max-width: 22ch;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .trabajo__grid {
+    max-width: 76rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.75rem, 3vw, 2.75rem);
+  }
+
+  .trabajo__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  :global(html.js) .trabajo__card {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s var(--ease-premium), transform 0.55s var(--ease-premium);
+  }
+
+  :global(html.js) .trabajo__card.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .trabajo__thumb {
+    position: relative;
+    display: block;
+    aspect-ratio: 8 / 5;
+    overflow: hidden;
+    border: 1px solid var(--color-bg);
+  }
+
+  .trabajo__thumb :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(0.96);
+    transform: scale(1);
+    transition: filter 0.5s var(--ease-premium), transform 0.6s var(--ease-premium);
+  }
+
+  .trabajo__card:hover .trabajo__thumb :global(img),
+  .trabajo__card:focus-visible .trabajo__thumb :global(img) {
+    filter: grayscale(0) contrast(1);
+    transform: scale(1.045);
+  }
+
+  .trabajo__thumb-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.1rem 1.25rem;
+    background: linear-gradient(to top, rgba(58, 56, 43, 0.78), transparent 65%);
+    opacity: 0;
+    transition: opacity 0.35s var(--ease-premium);
+  }
+
+  .trabajo__card:hover .trabajo__thumb-overlay,
+  .trabajo__card:focus-visible .trabajo__thumb-overlay {
+    opacity: 1;
+  }
+
+  .trabajo__thumb-name {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1.0625rem;
+    letter-spacing: -0.005em;
+    color: var(--color-text);
+  }
+
+  .trabajo__card:focus-visible .trabajo__thumb {
+    outline: 2px solid var(--color-bg);
+    outline-offset: 3px;
+  }
+
+  .trabajo__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .trabajo__meta-name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .trabajo__meta-category {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+
+  @media (max-width: 860px) {
+    .trabajo__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1.5rem, 5vw, 4rem);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease-premium);
+  }
+
+  .lightbox.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .lightbox__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 19, 14, 0.86);
+    backdrop-filter: blur(6px);
+  }
+
+  .lightbox__panel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 56rem;
+    max-height: 100%;
+    width: 100%;
+    background: var(--color-bg);
+    color: var(--color-text);
+    overflow: hidden;
+    overflow-y: auto;
+    transform: scale(0.97);
+    transition: transform 0.3s var(--ease-premium);
+  }
+
+  .lightbox.is-open .lightbox__panel {
+    transform: scale(1);
+  }
+
+  .lightbox__close {
+    position: absolute;
+    top: clamp(0.75rem, 2vw, 1.25rem);
+    right: clamp(0.75rem, 2vw, 1.25rem);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    border: none;
+    /* Solid, not translucent — this sits on top of each project's own
+       screenshot, whose colors we can't predict, so it needs guaranteed
+       contrast against any of them rather than blending with the panel. */
+    background: var(--color-bg);
+    color: var(--color-text);
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s var(--ease-premium), opacity 0.2s var(--ease-premium);
+  }
+
+  .lightbox__close:hover,
+  .lightbox__close:focus-visible {
+    opacity: 0.8;
+    transform: scale(1.08);
+  }
+
+  .lightbox__image-wrap {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .lightbox__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .lightbox__info {
+    padding: clamp(1.5rem, 3.5vw, 2.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .lightbox__category {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .lightbox__name {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.25rem, 2.4vw, 1.625rem);
+    letter-spacing: -0.01em;
+  }
+
+  .lightbox__description {
+    margin: 0.3rem 0 0;
+    max-width: 62ch;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    opacity: 0.82;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .trabajo__card {
+      transition: opacity 0.001ms;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cards = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-trabajo-card]'));
+  const grid = document.querySelector<HTMLElement>('.trabajo__grid');
+
+  if (cards.length && grid) {
+    if (prefersReducedMotion) {
+      cards.forEach((card) => card.classList.add('is-revealed'));
+    } else {
+      ScrollTrigger.create({
+        trigger: grid,
+        start: 'top 85%',
+        once: true,
+        onEnter: () => {
+          cards.forEach((card, i) => {
+            gsap.delayedCall(i * 0.08, () => card.classList.add('is-revealed'));
+          });
+        },
+      });
+    }
+  }
+
+  const lightbox = document.querySelector<HTMLElement>('[data-lightbox]');
+  const backdrop = document.querySelector<HTMLElement>('[data-lightbox-backdrop]');
+  const closeBtn = document.querySelector<HTMLButtonElement>('[data-lightbox-close]');
+  const imageEl = document.querySelector<HTMLImageElement>('[data-lightbox-image]');
+  const nameEl = document.querySelector<HTMLElement>('[data-lightbox-name]');
+  const categoryEl = document.querySelector<HTMLElement>('[data-lightbox-category]');
+  const descriptionEl = document.querySelector<HTMLElement>('[data-lightbox-description]');
+
+  if (lightbox && backdrop && closeBtn && imageEl && nameEl && categoryEl && descriptionEl) {
+    let lastFocused: HTMLElement | null = null;
+
+    const openLightbox = (card: HTMLButtonElement) => {
+      lastFocused = card;
+      const { name = '', category = '', description = '', fullSrc = '' } = card.dataset;
+
+      imageEl.src = fullSrc;
+      imageEl.alt = `Captura del proyecto ${name}`;
+      nameEl.textContent = name;
+      categoryEl.textContent = category;
+      descriptionEl.textContent = description;
+
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    };
+
+    const closeLightbox = () => {
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      lastFocused?.focus();
+    };
+
+    cards.forEach((card) => {
+      card.addEventListener('click', () => openLightbox(card));
+    });
+
+    backdrop.addEventListener('click', closeLightbox);
+    closeBtn.addEventListener('click', closeLightbox);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && lightbox.classList.contains('is-open')) {
+        closeLightbox();
+      }
+    });
+  }
+</script>
