@@ -1,0 +1,35 @@
+---
+import '../styles/global.css';
+
+import fontRegular from '../fonts/SpaceGrotesk-Regular.ttf';
+import fontSemiBold from '../fonts/SpaceGrotesk-SemiBold.ttf';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Preload the weights used above the fold to avoid flash of invisible text -->
+    <link rel="preload" as="font" type="font/ttf" href={fontRegular} crossorigin />
+    <link rel="preload" as="font" type="font/ttf" href={fontSemiBold} crossorigin />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

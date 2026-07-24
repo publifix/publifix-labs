@@ -1,0 +1,263 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/images/logo.png';
+
+const navItems = [
+  { label: 'Servicios', href: '#servicios' },
+  { label: 'Proceso', href: '#proceso' },
+  { label: 'Trabajo', href: '#trabajo' },
+  { label: 'Contacto', href: '#contacto' },
+];
+---
+
+<header class="site-header" data-header>
+  <a href="#top" class="site-header__logo" aria-label="Publifix Labs — inicio">
+    <Image src={logo} alt="Publifix Labs" width={168} height={67} loading="eager" fetchpriority="high" />
+  </a>
+
+  <nav class="site-header__nav" aria-label="Navegación principal">
+    <ul>
+      {navItems.map((item) => (
+        <li>
+          <a href={item.href}>{item.label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <a href="#contacto" class="site-header__cta">Iniciar proyecto</a>
+
+  <button class="site-header__menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-nav" data-menu-toggle>
+    <span></span>
+    <span></span>
+  </button>
+</header>
+
+<div class="mobile-nav" id="mobile-nav" data-mobile-nav>
+  <nav aria-label="Navegación móvil">
+    <ul>
+      {navItems.map((item) => (
+        <li>
+          <a href={item.href} data-mobile-nav-link>{item.label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+  <a href="#contacto" class="mobile-nav__cta" data-mobile-nav-link>Iniciar proyecto</a>
+</div>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    padding: clamp(1rem, 2.4vw, 1.5rem) clamp(1.25rem, 4vw, 3rem);
+    background: linear-gradient(to bottom, rgba(58, 56, 43, 0.55), rgba(58, 56, 43, 0));
+  }
+
+  .site-header__logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    line-height: 0;
+  }
+
+  .site-header__logo :global(img) {
+    height: clamp(1.75rem, 3.2vw, 2.375rem);
+    width: auto;
+  }
+
+  .site-header__nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .site-header__nav ul {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.5rem, 2.6vw, 2.75rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-header__nav a {
+    position: relative;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--color-text);
+    opacity: 0.85;
+    transition: opacity 0.2s var(--ease-premium);
+  }
+
+  .site-header__nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 100%;
+    bottom: -4px;
+    height: 1px;
+    background: currentColor;
+    transition: right 0.3s var(--ease-premium);
+  }
+
+  .site-header__nav a:hover {
+    opacity: 1;
+  }
+
+  .site-header__nav a:hover::after {
+    right: 0;
+  }
+
+  .site-header__cta {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7em 1.5em;
+    border-radius: 999px;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: transform 0.2s var(--ease-premium), opacity 0.2s var(--ease-premium);
+  }
+
+  .site-header__cta:hover {
+    transform: translateY(-2px);
+    opacity: 0.92;
+  }
+
+  .site-header__menu-toggle {
+    display: none;
+  }
+
+  @media (max-width: 860px) {
+    .site-header__nav {
+      display: none;
+    }
+
+    .site-header__cta {
+      display: none;
+    }
+
+    .site-header__menu-toggle {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 2.25rem;
+      height: 2.25rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .site-header__menu-toggle span {
+      display: block;
+      height: 1.5px;
+      width: 100%;
+      background: var(--color-text);
+    }
+  }
+
+  .site-header.is-scrolled {
+    background: rgba(58, 56, 43, 0.82);
+    backdrop-filter: blur(10px);
+  }
+
+  .mobile-nav {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    background: var(--color-bg);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s var(--ease-premium);
+  }
+
+  .mobile-nav.is-open {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+  }
+
+  .mobile-nav a {
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--color-text);
+  }
+
+  .mobile-nav .mobile-nav__cta {
+    display: inline-flex;
+    padding: 0.75em 1.75em;
+    border-radius: 999px;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  @media (min-width: 861px) {
+    .mobile-nav {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const menuToggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const mobileNav = document.querySelector<HTMLElement>('[data-mobile-nav]');
+
+  if (header) {
+    const toggleScrolledState = () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 24);
+    };
+
+    toggleScrolledState();
+    window.addEventListener('scroll', toggleScrolledState, { passive: true });
+  }
+
+  if (menuToggle && mobileNav) {
+    const closeMenu = () => {
+      mobileNav.classList.remove('is-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    };
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('is-open');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    mobileNav.querySelectorAll<HTMLAnchorElement>('[data-mobile-nav-link]').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+  }
+</script>
