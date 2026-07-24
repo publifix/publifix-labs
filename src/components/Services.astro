@@ -1,0 +1,319 @@
+---
+const panels = [
+  {
+    number: '01',
+    label: 'Sitios web de alto impacto',
+    heading: 'Diseño que no se ve genérico porque no lo es.',
+    body: 'Cada sitio se construye a la medida — sin plantillas, sin bloques reciclados de un proyecto anterior. Animaciones, transiciones y microinteracciones diseñadas para tu marca específica, no ajustadas después sobre un molde ajeno.',
+  },
+  {
+    number: '02',
+    label: 'E-commerce',
+    heading: 'Tiendas que venden, no solo que muestran producto.',
+    body: 'Integración de pagos, inventario y checkout optimizado para conversión real — pensado para el comportamiento de tu comprador, no para la demo genérica de una plataforma.',
+  },
+  {
+    number: '03',
+    label: 'Software a medida',
+    heading: 'Cuando lo que necesitas no existe todavía, lo construimos.',
+    body: 'Plataformas, dashboards, sistemas internos — herramientas hechas para tu operación específica, no un software genérico adaptado a la fuerza.',
+  },
+  {
+    number: '04',
+    label: 'Agentes de IA',
+    heading: 'Inteligencia artificial que trabaja, no que solo responde preguntas.',
+    body: 'Agentes integrados a tus procesos reales — atención, ventas, contenido, análisis — automatizando tareas específicas de tu negocio, no un chatbot genérico con tu logo encima.',
+  },
+];
+---
+
+<section class="servicios" id="servicios" aria-labelledby="servicios-heading" data-servicios>
+  <div class="servicios__intro">
+    <p class="servicios__eyebrow">Lo que construimos</p>
+    <h2 class="servicios__headline" id="servicios-heading">Cuatro formas de convertir código en ventaja.</h2>
+  </div>
+
+  <div class="servicios__stage" data-servicios-stage>
+    <div class="servicios__track" data-servicios-track>
+      {panels.map((panel) => (
+        <article class="servicios__panel" data-servicios-panel>
+          <span class="servicios__panel-number" aria-hidden="true">{panel.number}</span>
+          <div class="servicios__panel-copy">
+            <p class="servicios__panel-label">{panel.label}</p>
+            <h3 class="servicios__panel-heading">{panel.heading}</h3>
+            <p class="servicios__panel-body">{panel.body}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+
+  <div class="servicios__progress" data-servicios-progress aria-hidden="true">
+    {panels.map(() => (
+      <span class="servicios__dot" data-servicios-dot></span>
+    ))}
+  </div>
+</section>
+
+<p class="servicios__closing" data-servicios-closing>Un mismo equipo. Cuatro disciplinas trabajando juntas.</p>
+
+<style>
+  .servicios {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg);
+    color: var(--color-text);
+    scroll-margin-top: clamp(4.5rem, 10vw, 6rem);
+  }
+
+  .servicios__intro {
+    flex-shrink: 0;
+    padding: clamp(6.5rem, 12vw, 8.5rem) clamp(1.5rem, 6vw, 4rem) clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .servicios__eyebrow {
+    margin: 0 0 0.9rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .servicios__headline {
+    margin: 0;
+    max-width: 22ch;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .servicios__stage {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .servicios__track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .servicios__panel {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    padding: 0 clamp(1.5rem, 6vw, 4rem);
+  }
+
+  .servicios__panel-number {
+    font-size: clamp(5.5rem, 13vw, 10.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    opacity: 0.22;
+  }
+
+  .servicios__panel-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    max-width: 34rem;
+  }
+
+  .servicios__panel-label {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .servicios__panel-heading {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.375rem, 2.8vw, 2.125rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  .servicios__panel-body {
+    margin: 0;
+    max-width: 46ch;
+    font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+    line-height: 1.6;
+    opacity: 0.78;
+  }
+
+  .servicios__progress {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding: clamp(1.25rem, 3vw, 2rem) 0 clamp(2rem, 4vw, 3rem);
+  }
+
+  .servicios__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-text);
+    opacity: 0.28;
+    transition: opacity 0.3s var(--ease-premium), transform 0.3s var(--ease-premium);
+  }
+
+  .servicios__dot.is-active {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+
+  .servicios__closing {
+    margin: 0;
+    padding: clamp(3.5rem, 8vw, 6rem) clamp(1.5rem, 6vw, 4rem);
+    background: var(--color-bg);
+    color: var(--color-text);
+    text-align: center;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+    letter-spacing: -0.01em;
+  }
+
+  :global(html.js) .servicios__closing {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s var(--ease-premium), transform 0.6s var(--ease-premium);
+  }
+
+  :global(html.js) .servicios__closing.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Static fallback: no pin, no horizontal scrub — panels stack and read
+     top to bottom. Used for prefers-reduced-motion and small viewports,
+     where a scroll-jacked horizontal carousel is more nuisance than value. */
+  .servicios.is-static {
+    height: auto;
+    overflow: visible;
+  }
+
+  .servicios.is-static .servicios__stage {
+    overflow: visible;
+  }
+
+  .servicios.is-static .servicios__track {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.5rem, 6vw, 3.5rem);
+    padding-bottom: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .servicios.is-static .servicios__panel {
+    position: relative;
+    inset: auto;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .servicios.is-static .servicios__progress {
+    display: none;
+  }
+
+  @media (max-width: 860px) {
+    .servicios__panel {
+      grid-template-columns: 1fr;
+      align-content: center;
+      gap: 1rem;
+    }
+
+    .servicios__panel-number {
+      font-size: clamp(3.5rem, 18vw, 5rem);
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isCompactViewport = window.matchMedia('(max-width: 860px)').matches;
+
+  const section = document.querySelector<HTMLElement>('[data-servicios]');
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-servicios-panel]'));
+  const dots = Array.from(document.querySelectorAll<HTMLElement>('[data-servicios-dot]'));
+  const closing = document.querySelector<HTMLElement>('[data-servicios-closing]');
+
+  if (section && panels.length) {
+    if (prefersReducedMotion || isCompactViewport) {
+      section.classList.add('is-static');
+    } else {
+      gsap.set(panels[0], { xPercent: 0, opacity: 1 });
+      gsap.set(panels.slice(1), { xPercent: 100, opacity: 0 });
+      dots[0]?.classList.add('is-active');
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${window.innerHeight * 2.7}`,
+          pin: true,
+          scrub: true,
+          invalidateOnRefresh: true,
+          onUpdate(self) {
+            const active = Math.min(panels.length - 1, Math.round(self.progress * (panels.length - 1)));
+            dots.forEach((dot, i) => dot.classList.toggle('is-active', i === active));
+          },
+          // GSAP's pin can leave a stray translateY on the section once
+          // scroll passes the end of the pin range fast enough — force it
+          // back to a clean, non-transformed state so normal document flow
+          // (and everything below it) settles where it actually belongs.
+          onLeave: () => gsap.set(section, { clearProps: 'transform' }),
+          onLeaveBack: () => gsap.set(section, { clearProps: 'transform' }),
+        },
+      });
+
+      for (let i = 0; i < panels.length - 1; i++) {
+        tl.to(panels[i], { xPercent: -100, opacity: 0, ease: 'power1.inOut', duration: 1 }, i).to(
+          panels[i + 1],
+          { xPercent: 0, opacity: 1, ease: 'power1.inOut', duration: 1 },
+          i
+        );
+      }
+    }
+  }
+
+  if (closing) {
+    if (prefersReducedMotion) {
+      closing.classList.add('is-revealed');
+    } else {
+      ScrollTrigger.create({
+        trigger: closing,
+        start: 'top 88%',
+        once: true,
+        onEnter: () => closing.classList.add('is-revealed'),
+      });
+    }
+  }
+</script>

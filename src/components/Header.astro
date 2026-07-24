@@ -260,4 +260,38 @@ const navItems = [
       link.addEventListener('click', closeMenu);
     });
   }
+
+  // Smooth-scroll any header link (desktop nav, mobile nav, CTA) that points
+  // at an in-page anchor. Works mid-animation on any pinned/scrubbed section
+  // further down the page — it's just a normal scroll to the target's real
+  // document position, so those sections handle entering/leaving it same as
+  // with any other scroll. Links whose target doesn't exist yet (sections
+  // not built) fall through untouched.
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLAnchorElement>('.site-header a[href^="#"], .mobile-nav a[href^="#"]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const targetId = link.getAttribute('href')?.slice(1);
+      if (!targetId) return;
+
+      const targetEl = document.getElementById(targetId);
+      if (!targetEl) return;
+
+      event.preventDefault();
+
+      // A GSAP ScrollTrigger pin (e.g. the Servicios carousel) wraps its
+      // target in a ".pin-spacer" and keeps the target itself glued near
+      // the viewport top for as long as the pin is active — its rect stops
+      // reflecting where the section actually sits in the document. The
+      // spacer isn't transformed, so it always has the real position,
+      // pinned or not.
+      const rectSource =
+        targetEl.parentElement?.classList.contains('pin-spacer') ? targetEl.parentElement : targetEl;
+
+      const headerHeight = header?.offsetHeight ?? 0;
+      const top = rectSource.getBoundingClientRect().top + window.scrollY - headerHeight - 16;
+
+      window.scrollTo({ top, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    });
+  });
 </script>
