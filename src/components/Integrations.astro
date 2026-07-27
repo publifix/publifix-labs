@@ -1,0 +1,281 @@
+---
+import { siMeta, siWhatsapp, siN8n, siHubspot, siSupabase, siMake } from 'simple-icons';
+
+const positions = ['front', 'right', 'back', 'left', 'top', 'bottom'] as const;
+
+const faces = [
+  { icon: siMeta, tone: 'light' },
+  { icon: siWhatsapp, tone: 'dark' },
+  { icon: siN8n, tone: 'light' },
+  { icon: siHubspot, tone: 'dark' },
+  { icon: siSupabase, tone: 'dark' },
+  { icon: siMake, tone: 'light' },
+].map((face, i) => ({ ...face, position: positions[i] }));
+
+const bodyParagraphs = [
+  'Cada lead que llega desde Meta Ads, un formulario o WhatsApp pasa primero por un agente de IA entrenado para tu negocio: hace las preguntas correctas, identifica si el prospecto está listo para comprar, y lo dirige al vendedor indicado — con el contexto completo, no un nombre y un número de teléfono sueltos.',
+  'Lo hemos implementado en inmobiliaria (calificación de interesados por presupuesto y zona), retail (recuperación de carritos y consultas de producto) y wellness (agendamiento y triage de consultas) — mismo principio, adaptado a cómo compra cada industria.',
+];
+---
+
+<section class="integraciones" id="integraciones" aria-labelledby="integraciones-heading" data-integraciones>
+  <div class="integraciones__inner">
+    <div class="integraciones__cube-stage">
+      <p class="sr-only">Integraciones: Meta, WhatsApp, n8n, HubSpot, Supabase, Make.</p>
+      <div class="cube-wrap" data-cube-wrap aria-hidden="true">
+        <div class="cube">
+          {faces.map((face) => (
+            <div class={`cube__face cube__face--${face.position} cube__face--${face.tone}`}>
+              <svg class="cube__icon" viewBox="0 0 24 24">
+                <path d={face.icon.path} fill={`#${face.icon.hex}`} />
+              </svg>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="integraciones__content">
+      <p class="integraciones__eyebrow" data-int-reveal>Integraciones de IA</p>
+
+      <h2 class="integraciones__headline" id="integraciones-heading" data-int-reveal>
+        Mientras duermes, alguien ya está calificando a tus leads.
+      </h2>
+
+      <p class="integraciones__subtitle" data-int-reveal>
+        Agentes de inteligencia artificial que reciben, califican y dirigen leads en tiempo real — antes de que
+        lleguen a tu equipo comercial.
+      </p>
+
+      {bodyParagraphs.map((paragraph) => (
+        <p class="integraciones__body" data-int-reveal>{paragraph}</p>
+      ))}
+
+      <p class="integraciones__closing" data-int-reveal>Menos leads perdidos. Más tiempo para cerrar, no para filtrar.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .integraciones {
+    position: relative;
+    background: var(--color-bg);
+    color: var(--color-text);
+    padding: clamp(5.5rem, 11vw, 9rem) clamp(1.5rem, 6vw, 4rem);
+  }
+
+  .integraciones__inner {
+    max-width: 76rem;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: minmax(240px, 42%) 1fr;
+    gap: clamp(3rem, 6vw, 5.5rem);
+    align-items: center;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* --- 3D cube --- */
+  .integraciones__cube-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1400px;
+  }
+
+  .cube-wrap {
+    --cube-size: clamp(160px, 18vw, 240px);
+  }
+
+  :global(html.js) .cube-wrap {
+    opacity: 0;
+  }
+
+  .cube {
+    width: var(--cube-size);
+    height: var(--cube-size);
+    position: relative;
+    transform-style: preserve-3d;
+    animation: cube-spin 22s linear infinite;
+  }
+
+  .cube__face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 252, 233, 0.14);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .cube__face--light {
+    background: var(--color-text);
+  }
+
+  .cube__face--dark {
+    background: var(--color-bg);
+  }
+
+  .cube__face--front {
+    transform: rotateY(0deg) translateZ(calc(var(--cube-size) / 2));
+  }
+
+  .cube__face--back {
+    transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2));
+  }
+
+  .cube__face--right {
+    transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2));
+  }
+
+  .cube__face--left {
+    transform: rotateY(-90deg) translateZ(calc(var(--cube-size) / 2));
+  }
+
+  .cube__face--top {
+    transform: rotateX(90deg) translateZ(calc(var(--cube-size) / 2));
+  }
+
+  .cube__face--bottom {
+    transform: rotateX(-90deg) translateZ(calc(var(--cube-size) / 2));
+  }
+
+  .cube__icon {
+    width: 38%;
+    height: 38%;
+  }
+
+  @keyframes cube-spin {
+    from {
+      transform: rotateX(0deg) rotateY(0deg);
+    }
+    to {
+      transform: rotateX(360deg) rotateY(360deg);
+    }
+  }
+
+  /* --- Copy column --- */
+  .integraciones__content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 2.6vw, 1.75rem);
+  }
+
+  .integraciones__eyebrow {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .integraciones__headline {
+    margin: 0;
+    max-width: 20ch;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.875rem, 3.8vw, 2.875rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .integraciones__subtitle {
+    margin: 0;
+    max-width: 46ch;
+    font-size: clamp(1rem, 1.5vw, 1.1875rem);
+    line-height: 1.55;
+    opacity: 0.85;
+  }
+
+  .integraciones__body {
+    margin: 0;
+    max-width: 58ch;
+    font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+    line-height: 1.65;
+    opacity: 0.78;
+  }
+
+  .integraciones__closing {
+    margin: 0.25rem 0 0;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+    letter-spacing: -0.005em;
+  }
+
+  :global(html.js) [data-int-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  @media (max-width: 860px) {
+    .integraciones__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .integraciones__cube-stage {
+      order: -1;
+      padding-bottom: clamp(1rem, 4vw, 2rem);
+    }
+
+    .cube-wrap {
+      --cube-size: clamp(140px, 40vw, 200px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) [data-int-reveal] {
+      opacity: 1;
+      transform: none;
+    }
+
+    :global(html.js) .cube-wrap {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const section = document.querySelector<HTMLElement>('[data-integraciones]');
+  const revealItems = document.querySelectorAll<HTMLElement>('[data-int-reveal]');
+  const cubeWrap = document.querySelector<HTMLElement>('[data-cube-wrap]');
+
+  if (section) {
+    if (prefersReducedMotion) {
+      gsap.set(revealItems, { clearProps: 'opacity,transform' });
+      if (cubeWrap) gsap.set(cubeWrap, { clearProps: 'opacity' });
+    } else {
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top 80%',
+        once: true,
+        onEnter: () => {
+          gsap.to(revealItems, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.08 });
+          if (cubeWrap) gsap.to(cubeWrap, { opacity: 1, duration: 0.8, ease: 'power2.out' });
+        },
+      });
+    }
+  }
+</script>
