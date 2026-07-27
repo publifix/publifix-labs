@@ -1,36 +1,195 @@
 ---
+import { Image } from 'astro:assets';
+import logoPublifix from '../assets/images/logo-publifix.png';
+
 const year = new Date().getFullYear();
+
+const navLinks = [
+  { label: 'Servicios', href: '#servicios' },
+  { label: 'Trabajo', href: '#trabajo' },
+  { label: 'Proceso', href: '#proceso' },
+  { label: 'Contacto', href: '#contacto' },
+];
 ---
 
-<footer class="site-footer">
-  <p class="site-footer__brand">Publifix Labs</p>
-  <p class="site-footer__copy">© {year} Publifix Labs. Todos los derechos reservados.</p>
+<footer class="site-footer" data-site-footer>
+  <div class="site-footer__grid">
+    <div class="site-footer__col site-footer__col--brand">
+      <a href="#top" class="site-footer__logo" aria-label="Publifix — inicio">
+        <Image src={logoPublifix} alt="Publifix" width={560} height={172} loading="lazy" />
+      </a>
+      <p class="site-footer__brand-desc">
+        Estudio de desarrollo web, software a medida e inteligencia artificial.
+      </p>
+    </div>
+
+    <div class="site-footer__col">
+      <p class="site-footer__col-title">Navegación</p>
+      <ul class="site-footer__links">
+        {navLinks.map((link) => (
+          <li><a href={link.href} data-footer-nav-link>{link.label}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="site-footer__col">
+      <p class="site-footer__col-title">Contacto</p>
+      <ul class="site-footer__links">
+        <li><a href="mailto:media@publifix.net">media@publifix.net</a></li>
+        <li class="site-footer__static">Querétaro, México</li>
+      </ul>
+    </div>
+
+    <div class="site-footer__col">
+      <p class="site-footer__affiliation">Parte de Publifix.</p>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom">
+    <p class="site-footer__copy">© {year} Publifix Labs. Todos los derechos reservados.</p>
+  </div>
 </footer>
 
 <style>
   .site-footer {
     background: var(--color-bg);
     color: var(--color-text);
-    padding: clamp(2rem, 5vw, 2.75rem) clamp(1.5rem, 6vw, 4rem);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-    border-top: 1px solid rgba(255, 252, 233, 0.14);
+    padding: clamp(3.5rem, 7vw, 5rem) clamp(1.5rem, 6vw, 4rem) clamp(1.75rem, 3vw, 2.25rem);
   }
 
-  .site-footer__brand {
+  .site-footer__grid {
+    max-width: 76rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .site-footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .site-footer__logo {
+    display: inline-flex;
+    align-items: center;
+    line-height: 0;
+    width: fit-content;
+  }
+
+  .site-footer__logo :global(img) {
+    height: 1.375rem;
+    width: auto;
+  }
+
+  .site-footer__brand-desc {
     margin: 0;
-    font-family: var(--font-sans);
-    font-weight: 600;
+    max-width: 26ch;
     font-size: 0.9375rem;
-    letter-spacing: -0.005em;
+    font-weight: 300;
+    line-height: 1.55;
+    opacity: 0.75;
+  }
+
+  .site-footer__col-title {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .site-footer__links {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .site-footer__links a {
+    font-size: 0.9375rem;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.82;
+    transition: opacity 0.2s var(--ease-premium);
+  }
+
+  .site-footer__links a:hover,
+  .site-footer__links a:focus-visible {
+    opacity: 1;
+  }
+
+  .site-footer__static {
+    font-size: 0.9375rem;
+    opacity: 0.82;
+  }
+
+  .site-footer__affiliation {
+    margin: 0;
+    font-size: 0.8125rem;
+    opacity: 0.5;
+  }
+
+  .site-footer__bottom {
+    max-width: 76rem;
+    margin: clamp(2.5rem, 5vw, 3.5rem) auto 0;
+    padding-top: clamp(1.5rem, 3vw, 2rem);
+    border-top: 1px solid rgba(255, 252, 233, 0.14);
   }
 
   .site-footer__copy {
     margin: 0;
     font-size: 0.8125rem;
-    opacity: 0.6;
+    opacity: 0.55;
+  }
+
+  @media (max-width: 860px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr 1fr;
+      row-gap: clamp(2.25rem, 6vw, 3rem);
+    }
+
+    .site-footer__col--brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
+
+<script>
+  // Footer nav links share the header's anchors but live in a separate,
+  // self-contained component — this mirrors Header.astro's smooth-scroll
+  // handler (including the pin-spacer offset fix for the Servicios
+  // carousel) rather than reaching into Header.astro to extend it.
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const header = document.querySelector<HTMLElement>('[data-header]');
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-footer-nav-link]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const targetId = link.getAttribute('href')?.slice(1);
+      if (!targetId) return;
+
+      const targetEl = document.getElementById(targetId);
+      if (!targetEl) return;
+
+      event.preventDefault();
+
+      const rectSource =
+        targetEl.parentElement?.classList.contains('pin-spacer') ? targetEl.parentElement : targetEl;
+
+      const headerHeight = header?.offsetHeight ?? 0;
+      const top = rectSource.getBoundingClientRect().top + window.scrollY - headerHeight - 16;
+
+      window.scrollTo({ top, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    });
+  });
+</script>
