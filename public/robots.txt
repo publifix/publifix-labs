@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://labs.publifix.net/sitemap-index.xml

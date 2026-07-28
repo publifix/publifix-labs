@@ -80,7 +80,7 @@ const projects = await Promise.all(
         <span class="trabajo__thumb">
           <Image
             src={project.image}
-            alt={`Captura del proyecto ${project.name}`}
+            alt={`${project.name} — proyecto de ${project.category.toLowerCase().replace('ia', 'IA')} desarrollado por Publifix Labs`}
             width={760}
             loading="lazy"
           />
@@ -427,7 +427,7 @@ const projects = await Promise.all(
       const { name = '', category = '', description = '', fullSrc = '' } = card.dataset;
 
       imageEl.src = fullSrc;
-      imageEl.alt = `Captura del proyecto ${name}`;
+      imageEl.alt = `${name} — proyecto de ${category.toLowerCase().replace('ia', 'IA')} desarrollado por Publifix Labs`;
       nameEl.textContent = name;
       categoryEl.textContent = category;
       descriptionEl.textContent = description;
