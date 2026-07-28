@@ -489,8 +489,31 @@ const slideCount = projects.length + 2; // +1 headline slide, +1 closing CTA sli
         maxYOffset = slideInners[0].offsetHeight * 0.62;
       };
 
+      // Shared by onUpdate and the initial/refresh setup below, so the
+      // section's resting (unpinned) position always matches exactly what
+      // onUpdate would compute at that same progress — otherwise the track
+      // sits untransformed (flush left) until progress first changes, which
+      // only happens once the pin engages, producing a visible snap.
+      const applyProgress = (progress: number) => {
+        const currentIndex = progress * (slides.length - 1);
+        const i0 = Math.floor(currentIndex);
+        const i1 = Math.min(slides.length - 1, i0 + 1);
+        const localT = currentIndex - i0;
+        const currentX = positions[i0] + (positions[i1] - positions[i0]) * localT;
+
+        gsap.set(track, { x: centerOffset - currentX });
+
+        slides.forEach((_, i) => {
+          const distance = Math.min(1, Math.abs(i - currentIndex));
+          gsap.set(slideInners[i], { y: distance * maxYOffset });
+        });
+
+        const activeIndex = Math.min(slides.length - 1, Math.round(currentIndex));
+        dots.forEach((dot, i) => dot.classList.toggle('is-active', i === activeIndex));
+      };
+
       measure();
-      dots[0]?.classList.add('is-active');
+      applyProgress(0);
 
       const trigger = ScrollTrigger.create({
         trigger: section,
@@ -503,24 +526,11 @@ const slideCount = projects.length + 2; // +1 headline slide, +1 closing CTA sli
         // when scrolling in fast (trackpad flick, etc.).
         anticipatePin: 1,
         invalidateOnRefresh: true,
-        onRefresh: measure,
-        onUpdate(self) {
-          const currentIndex = self.progress * (slides.length - 1);
-          const i0 = Math.floor(currentIndex);
-          const i1 = Math.min(slides.length - 1, i0 + 1);
-          const localT = currentIndex - i0;
-          const currentX = positions[i0] + (positions[i1] - positions[i0]) * localT;
-
-          gsap.set(track, { x: centerOffset - currentX });
-
-          slides.forEach((_, i) => {
-            const distance = Math.min(1, Math.abs(i - currentIndex));
-            gsap.set(slideInners[i], { y: distance * maxYOffset });
-          });
-
-          const activeIndex = Math.min(slides.length - 1, Math.round(currentIndex));
-          dots.forEach((dot, i) => dot.classList.toggle('is-active', i === activeIndex));
+        onRefresh: (self) => {
+          measure();
+          applyProgress(self.progress);
         },
+        onUpdate: (self) => applyProgress(self.progress),
         // Same stray-transform fix used on the Servicios pin.
         onLeave: () => gsap.set(section, { clearProps: 'transform' }),
         onLeaveBack: () => gsap.set(section, { clearProps: 'transform' }),
