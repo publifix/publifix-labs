@@ -60,76 +60,36 @@ const projects = await Promise.all(
   })
 );
 
-const [newYou, vel, pub, vin, grand, dra] = projects;
-
-const panels = [
-  {
-    dividerPercent: 46,
-    dark: false,
-    left: { type: 'project' as const, project: newYou },
-    right: { type: 'headline' as const, text: 'Proyectos que ya están en producción.' },
-  },
-  {
-    dividerPercent: 50,
-    dark: false,
-    left: { type: 'project' as const, project: vel },
-    right: { type: 'project' as const, project: pub },
-  },
-  {
-    dividerPercent: 50,
-    dark: false,
-    left: { type: 'project' as const, project: vin },
-    right: { type: 'project' as const, project: grand },
-  },
-  {
-    dividerPercent: 42,
-    dark: true,
-    left: { type: 'project' as const, project: dra },
-    right: { type: 'cta' as const },
-  },
-];
+const slideCount = projects.length + 1; // +1 for the closing CTA slide
 ---
 
 <section class="trabajo" id="trabajo" aria-labelledby="trabajo-heading" data-trabajo>
   <div class="trabajo__intro">
     <p class="trabajo__eyebrow">Trabajo</p>
+    <h2 class="trabajo__headline" id="trabajo-heading">Proyectos que ya están en producción.</h2>
   </div>
 
   <div class="trabajo__stage" data-trabajo-stage>
-    <span class="trabajo__divider" data-trabajo-divider aria-hidden="true"></span>
-
     <div class="trabajo__track" data-trabajo-track>
-      {panels.map((panel, i) => (
-        <article
-          class={`trabajo__panel ${panel.dark ? 'trabajo__panel--dark' : ''} ${i === 0 ? 'trabajo__panel--intro' : ''}`}
-          data-trabajo-panel
-          style={`grid-template-columns: ${panel.dividerPercent}% 1fr`}
-        >
-          <div class="trabajo__side trabajo__side--left">
-            {panel.left.type === 'project' && <WorkCard project={panel.left.project} />}
-          </div>
-
-          <div class="trabajo__side trabajo__side--right">
-            {panel.right.type === 'headline' && (
-              <h2 class="trabajo__panel-headline" id="trabajo-heading">{panel.right.text}</h2>
-            )}
-            {panel.right.type === 'project' && <WorkCard project={panel.right.project} />}
-            {panel.right.type === 'cta' && (
-              <div class="trabajo__cta">
-                <p class="trabajo__cta-eyebrow">¿Y tu proyecto?</p>
-                <h3 class="trabajo__cta-headline">Tu proyecto podría ser el próximo.</h3>
-                <p class="trabajo__cta-subtext">Cuéntanos qué estás construyendo.</p>
-                <a href="#contacto" class="trabajo__cta-button">Iniciar proyecto</a>
-              </div>
-            )}
-          </div>
-        </article>
+      {projects.map((project) => (
+        <div class="trabajo__slide" data-trabajo-slide>
+          <WorkCard project={project} />
+        </div>
       ))}
+
+      <div class="trabajo__slide" data-trabajo-slide>
+        <div class="trabajo__closing">
+          <p class="trabajo__closing-eyebrow">¿Y tu proyecto?</p>
+          <h3 class="trabajo__closing-headline">Tu proyecto podría ser el próximo.</h3>
+          <p class="trabajo__closing-subtext">Cuéntanos qué estás construyendo.</p>
+          <a href="#contacto" class="trabajo__closing-button">Iniciar proyecto</a>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="trabajo__progress" data-trabajo-progress aria-hidden="true">
-    {panels.map(() => (
+    {Array.from({ length: slideCount }).map(() => (
       <span class="trabajo__dot" data-trabajo-dot></span>
     ))}
   </div>
@@ -156,6 +116,10 @@ const panels = [
 
 <style>
   .trabajo {
+    --card-width: clamp(280px, 56vw, 760px);
+    --slide-gap: clamp(2rem, 6vw, 5rem);
+    --slide-height: clamp(380px, 44vw, 540px);
+
     position: relative;
     height: 100vh;
     height: 100svh;
@@ -169,16 +133,28 @@ const panels = [
 
   .trabajo__intro {
     flex-shrink: 0;
-    padding: clamp(6.5rem, 12vw, 8.5rem) clamp(1.5rem, 6vw, 4rem) clamp(1.5rem, 3vw, 2rem);
+    max-width: 60rem;
+    padding: clamp(6rem, 11vw, 8rem) clamp(1.5rem, 6vw, 4rem) clamp(1.25rem, 2.5vw, 1.75rem);
   }
 
   .trabajo__eyebrow {
-    margin: 0;
+    margin: 0 0 0.9rem;
     font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     opacity: 0.6;
+  }
+
+  .trabajo__headline {
+    margin: 0;
+    max-width: 22ch;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
   }
 
   .trabajo__stage {
@@ -189,70 +165,60 @@ const panels = [
   }
 
   .trabajo__track {
-    position: relative;
-    width: 100%;
+    display: flex;
+    align-items: center;
     height: 100%;
+    padding-left: calc((100vw - var(--card-width)) / 2);
+    padding-right: calc((100vw - var(--card-width)) / 2);
+    will-change: transform;
   }
 
-  .trabajo__divider {
+  .trabajo__slide {
+    position: relative;
+    flex: 0 0 var(--card-width);
+    width: var(--card-width);
+    height: var(--slide-height);
+    will-change: transform;
+  }
+
+  .trabajo__slide:not(:last-child)::after {
+    content: '';
     position: absolute;
     top: 0;
     bottom: 0;
+    right: calc(var(--slide-gap) / -2);
     width: 2px;
-    z-index: 2;
     background: var(--color-bg);
     pointer-events: none;
-    transform: translateX(-50%);
   }
 
-  .trabajo__panel {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    align-items: center;
-    gap: clamp(2rem, 5vw, 4rem);
-    padding: 0 clamp(1.5rem, 6vw, 4rem);
-    background: var(--color-text);
-    color: var(--color-bg);
-    --panel-bg: var(--color-text);
-    --panel-text: var(--color-bg);
+  .trabajo__slide + .trabajo__slide {
+    margin-left: var(--slide-gap);
   }
 
-  .trabajo__panel--dark {
-    background: var(--color-bg);
-    color: var(--color-text);
-    --panel-bg: var(--color-bg);
-    --panel-text: var(--color-text);
+  .trabajo__slide :global(.work-card) {
+    height: 100%;
   }
 
-  .trabajo__side--left {
-    justify-self: end;
+  .trabajo__slide :global(.work-card__media) {
+    height: calc(100% - 5.5rem);
   }
 
-  .trabajo__side--right {
-    justify-self: start;
-    max-width: 34rem;
-  }
-
-  .trabajo__panel-headline {
-    margin: 0;
-    max-width: 16ch;
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: clamp(1.75rem, 3.6vw, 2.75rem);
-    line-height: 1.15;
-    letter-spacing: -0.015em;
-    text-wrap: balance;
-  }
-
-  .trabajo__cta {
+  /* Closing CTA slide — inverted palette so it reads as the carousel's close */
+  .trabajo__closing {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
     align-items: flex-start;
+    justify-content: center;
+    gap: 0.85rem;
+    height: 100%;
+    padding: clamp(2rem, 4vw, 3rem);
+    border-radius: 22px;
+    background: var(--color-bg);
+    color: var(--color-text);
   }
 
-  .trabajo__cta-eyebrow {
+  .trabajo__closing-eyebrow {
     margin: 0;
     font-size: 0.8125rem;
     font-weight: 600;
@@ -261,7 +227,7 @@ const panels = [
     opacity: 0.6;
   }
 
-  .trabajo__cta-headline {
+  .trabajo__closing-headline {
     margin: 0;
     max-width: 14ch;
     font-family: var(--font-sans);
@@ -272,28 +238,28 @@ const panels = [
     text-wrap: balance;
   }
 
-  .trabajo__cta-subtext {
+  .trabajo__closing-subtext {
     margin: 0;
     font-size: 1rem;
     opacity: 0.78;
   }
 
-  .trabajo__cta-button {
+  .trabajo__closing-button {
     margin-top: 0.5rem;
     display: inline-flex;
     align-items: center;
     padding: 0.9em 1.9em;
     border-radius: 999px;
-    background: var(--panel-text);
-    color: var(--panel-bg);
+    background: var(--color-text);
+    color: var(--color-bg);
     font-size: 0.9375rem;
     font-weight: 600;
     text-decoration: none;
     transition: opacity 0.2s var(--ease-premium), transform 0.2s var(--ease-premium);
   }
 
-  .trabajo__cta-button:hover,
-  .trabajo__cta-button:focus-visible {
+  .trabajo__closing-button:hover,
+  .trabajo__closing-button:focus-visible {
     opacity: 0.88;
     transform: translateY(-2px);
   }
@@ -303,8 +269,9 @@ const panels = [
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 0.625rem;
-    padding: clamp(1.25rem, 3vw, 2rem) 0 clamp(2rem, 4vw, 3rem);
+    padding: clamp(1.25rem, 3vw, 2rem) 1.5rem clamp(2rem, 4vw, 3rem);
   }
 
   .trabajo__dot {
@@ -321,8 +288,8 @@ const panels = [
     transform: scale(1.35);
   }
 
-  /* Static fallback: no pin, no scrub — panels stack top to bottom.
-     Used for prefers-reduced-motion and small viewports. */
+  /* Static fallback: no pin, no horizontal scrub — slides stack top to
+     bottom. Used for prefers-reduced-motion and small viewports. */
   .trabajo.is-static {
     height: auto;
     overflow: visible;
@@ -332,44 +299,29 @@ const panels = [
     overflow: visible;
   }
 
-  .trabajo.is-static .trabajo__divider {
-    display: none;
-  }
-
   .trabajo.is-static .trabajo__track {
-    height: auto;
-    display: flex;
     flex-direction: column;
-    gap: clamp(3rem, 7vw, 4.5rem);
-    padding-bottom: clamp(2.5rem, 6vw, 3.5rem);
+    height: auto;
+    padding: 0 clamp(1.5rem, 6vw, 4rem);
+    gap: clamp(2.5rem, 6vw, 3.5rem);
   }
 
-  .trabajo.is-static .trabajo__panel {
-    position: relative;
-    inset: auto;
-    opacity: 1 !important;
-    grid-template-columns: 1fr !important;
-    padding: clamp(2rem, 5vw, 3rem) clamp(1.5rem, 6vw, 4rem);
+  .trabajo.is-static .trabajo__slide {
+    width: 100%;
+    height: clamp(360px, 90vw, 460px);
+    transform: none !important;
   }
 
-  .trabajo.is-static .trabajo__panel--intro .trabajo__side--right {
-    order: -1;
+  .trabajo.is-static .trabajo__slide + .trabajo__slide {
+    margin-left: 0;
   }
 
-  .trabajo.is-static .trabajo__side--left,
-  .trabajo.is-static .trabajo__side--right {
-    justify-self: stretch;
-    max-width: none;
+  .trabajo.is-static .trabajo__slide::after {
+    display: none;
   }
 
   .trabajo.is-static .trabajo__progress {
     display: none;
-  }
-
-  @media (max-width: 860px) {
-    .trabajo__panel {
-      gap: 1.5rem;
-    }
   }
 
   /* Lightbox */
@@ -499,57 +451,52 @@ const panels = [
   const isCompactViewport = window.matchMedia('(max-width: 860px)').matches;
 
   const section = document.querySelector<HTMLElement>('[data-trabajo]');
-  const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-trabajo-panel]'));
+  const track = document.querySelector<HTMLElement>('[data-trabajo-track]');
+  const slides = Array.from(document.querySelectorAll<HTMLElement>('[data-trabajo-slide]'));
   const dots = Array.from(document.querySelectorAll<HTMLElement>('[data-trabajo-dot]'));
-  const divider = document.querySelector<HTMLElement>('[data-trabajo-divider]');
 
-  // Must mirror each panel's `dividerPercent` in the frontmatter, in order.
-  const DIVIDER_POSITIONS = [46, 50, 50, 42];
-  const DARK_PANEL_INDEX = 3;
-  const COLOR_ON_LIGHT_PANEL = '#3A382B';
-  const COLOR_ON_DARK_PANEL = '#FFFCE9';
+  const MAX_Y_OFFSET = 64; // px a slide sits below its resting position while off-center
 
-  if (section && panels.length && divider) {
+  if (section && track && slides.length) {
     if (prefersReducedMotion || isCompactViewport) {
       section.classList.add('is-static');
     } else {
-      gsap.set(panels[0], { opacity: 1 });
-      gsap.set(panels.slice(1), { opacity: 0 });
-      gsap.set(divider, { left: `${DIVIDER_POSITIONS[0]}%`, backgroundColor: COLOR_ON_LIGHT_PANEL });
+      let step = 0; // px between two consecutive slide centers, in untransformed layout
+
+      const measure = () => {
+        if (slides.length < 2) return;
+        step = slides[1].offsetLeft - slides[0].offsetLeft;
+      };
+
+      measure();
       dots[0]?.classList.add('is-active');
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: () => `+=${window.innerHeight * 2.7}`,
-          pin: true,
-          scrub: true,
-          invalidateOnRefresh: true,
-          onUpdate(self) {
-            const active = Math.min(panels.length - 1, Math.round(self.progress * (panels.length - 1)));
-            dots.forEach((dot, i) => dot.classList.toggle('is-active', i === active));
-          },
-          // Same stray-transform fix used on the Servicios pin.
-          onLeave: () => gsap.set(section, { clearProps: 'transform' }),
-          onLeaveBack: () => gsap.set(section, { clearProps: 'transform' }),
+      const trigger = ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: () => `+=${window.innerHeight * (slides.length - 1) * 0.85}`,
+        pin: true,
+        scrub: true,
+        invalidateOnRefresh: true,
+        onRefresh: measure,
+        onUpdate(self) {
+          const currentIndex = self.progress * (slides.length - 1);
+          gsap.set(track, { x: -currentIndex * step });
+
+          slides.forEach((slide, i) => {
+            const distance = Math.min(1, Math.abs(i - currentIndex));
+            gsap.set(slide, { y: distance * MAX_Y_OFFSET });
+          });
+
+          const activeIndex = Math.min(slides.length - 1, Math.round(currentIndex));
+          dots.forEach((dot, i) => dot.classList.toggle('is-active', i === activeIndex));
         },
+        // Same stray-transform fix used on the Servicios pin.
+        onLeave: () => gsap.set(section, { clearProps: 'transform' }),
+        onLeaveBack: () => gsap.set(section, { clearProps: 'transform' }),
       });
 
-      for (let i = 0; i < panels.length - 1; i++) {
-        tl.to(panels[i], { opacity: 0, ease: 'power1.inOut', duration: 1 }, i)
-          .to(panels[i + 1], { opacity: 1, ease: 'power1.inOut', duration: 1 }, i)
-          .to(
-            divider,
-            {
-              left: `${DIVIDER_POSITIONS[i + 1]}%`,
-              backgroundColor: i + 1 === DARK_PANEL_INDEX ? COLOR_ON_DARK_PANEL : COLOR_ON_LIGHT_PANEL,
-              ease: 'power1.inOut',
-              duration: 1,
-            },
-            i
-          );
-      }
+      window.addEventListener('load', () => trigger.refresh());
     }
   }
 
