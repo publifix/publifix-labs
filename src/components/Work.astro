@@ -312,7 +312,7 @@ const slideCount = projects.length + 2; // +1 headline slide, +1 closing CTA sli
   .trabajo.is-static .trabajo__track {
     flex-direction: column;
     height: auto;
-    padding: clamp(4rem, 10vw, 6rem) clamp(1.5rem, 6vw, 4rem) 0;
+    padding: clamp(4rem, 10vw, 6rem) clamp(1.5rem, 6vw, 4rem);
     gap: clamp(2.5rem, 6vw, 3.5rem);
   }
 
@@ -327,6 +327,13 @@ const slideCount = projects.length + 2; // +1 headline slide, +1 closing CTA sli
   }
 
   .trabajo.is-static .trabajo__intro-card {
+    height: auto;
+  }
+
+  /* The intro slide's content is short (eyebrow + headline), so it must
+     not inherit the fixed card height above — otherwise it leaves a tall
+     empty gap before the first project card. */
+  .trabajo.is-static .trabajo__track > .trabajo__slide:first-child .trabajo__slide-inner {
     height: auto;
   }
 
