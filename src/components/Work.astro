@@ -149,8 +149,6 @@ const slideCount = projects.length + 2; // +1 headline slide, +1 closing CTA sli
   .trabajo__track {
     display: flex;
     height: 100%;
-    padding-left: calc((100vw - var(--card-width)) / 2);
-    padding-right: calc((100vw - var(--card-width)) / 2);
     will-change: transform;
   }
 
@@ -480,11 +478,14 @@ const slideCount = projects.length + 2; // +1 headline slide, +1 closing CTA sli
     if (prefersReducedMotion || isCompactViewport) {
       section.classList.add('is-static');
     } else {
-      let positions: number[] = []; // each slide's untransformed offsetLeft
+      let positions: number[] = []; // each slide's untransformed offsetLeft (no padding — track has none)
+      let centerOffset = 0; // px to add back so the active slide lands in the stage's true center
       let maxYOffset = 0; // px a slide sits below its resting position while off-center
 
       const measure = () => {
         positions = slides.map((slide) => slide.offsetLeft);
+        const stageWidth = track!.parentElement!.clientWidth;
+        centerOffset = (stageWidth - slides[0].offsetWidth) / 2;
         maxYOffset = slideInners[0].offsetHeight * 0.62;
       };
 
@@ -497,6 +498,10 @@ const slideCount = projects.length + 2; // +1 headline slide, +1 closing CTA sli
         end: () => `+=${window.innerHeight * (slides.length - 1) * 0.85}`,
         pin: true,
         scrub: true,
+        // Starts the unpin transition a hair before the exact scroll boundary
+        // instead of exactly at it, which is what causes a visible flash/snap
+        // when scrolling in fast (trackpad flick, etc.).
+        anticipatePin: 1,
         invalidateOnRefresh: true,
         onRefresh: measure,
         onUpdate(self) {
@@ -506,7 +511,7 @@ const slideCount = projects.length + 2; // +1 headline slide, +1 closing CTA sli
           const localT = currentIndex - i0;
           const currentX = positions[i0] + (positions[i1] - positions[i0]) * localT;
 
-          gsap.set(track, { x: -currentX });
+          gsap.set(track, { x: centerOffset - currentX });
 
           slides.forEach((_, i) => {
             const distance = Math.min(1, Math.abs(i - currentIndex));
