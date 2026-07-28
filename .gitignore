@@ -13,6 +13,10 @@ npm-debug.log*
 # environment variables
 .env
 .env.production
+.dev.vars
+
+# wrangler (Cloudflare Worker) local state
+.wrangler/
 
 # macOS-specific files
 .DS_Store

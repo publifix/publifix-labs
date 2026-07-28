@@ -1,0 +1,7 @@
+name = "labs-contacto-form"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+
+# RESEND_API_KEY is a secret, not a var — never set it here.
+# After installing wrangler, run:
+#   wrangler secret put RESEND_API_KEY

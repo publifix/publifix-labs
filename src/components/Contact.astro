@@ -102,6 +102,11 @@ const timeSlots = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00'];
           <button type="submit" class="contacto__submit" data-submit-button>
             <span data-submit-label>Solicitar llamada →</span>
           </button>
+
+          <p class="contacto__form-error" data-form-error hidden>
+            No pudimos enviar tu solicitud. Intenta de nuevo o escríbenos directamente a
+            <a href="mailto:media@publifix.net">media@publifix.net</a>.
+          </p>
         </form>
       </div>
 
@@ -485,6 +490,19 @@ const timeSlots = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00'];
     cursor: default;
   }
 
+  .contacto__form-error {
+    margin: -0.35rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-text);
+    opacity: 0.85;
+  }
+
+  .contacto__form-error a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
   .contacto__step--success:not([hidden]) {
     display: flex;
     align-items: center;
@@ -533,6 +551,10 @@ const timeSlots = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00'];
   const preferenciaInput = document.querySelector<HTMLInputElement>('[data-preferencia-input]');
   const submitButton = document.querySelector<HTMLButtonElement>('[data-submit-button]');
   const submitLabel = document.querySelector<HTMLElement>('[data-submit-label]');
+  const formError = document.querySelector<HTMLElement>('[data-form-error]');
+
+  // TODO: replace with the real Worker URL once it's deployed (see worker/README.md).
+  const CONTACT_ENDPOINT = 'https://labs-contacto-form.TU-SUBDOMINIO.workers.dev';
 
   if (
     card &&
@@ -547,7 +569,8 @@ const timeSlots = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00'];
     form &&
     preferenciaInput &&
     submitButton &&
-    submitLabel
+    submitLabel &&
+    formError
   ) {
     const MONTH_NAMES = [
       'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
@@ -671,20 +694,37 @@ const timeSlots = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00'];
       crossfade(stepForm, stepCalendar!);
     });
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (!form.reportValidity()) return;
 
+      formError.hidden = true;
       submitButton.disabled = true;
       submitLabel.textContent = 'Enviando…';
 
-      // No backend yet — this simulates the request and only shows the
-      // success state client-side.
-      window.setTimeout(() => {
+      const payload = Object.fromEntries(new FormData(form).entries());
+
+      try {
+        const response = await fetch(CONTACT_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json().catch(() => null);
+
+        if (!response.ok || !result?.success) {
+          throw new Error(result?.error || `Worker respondió ${response.status}`);
+        }
+
         crossfade(stepForm, stepSuccess!);
+      } catch (err) {
+        console.error('Contacto: fallo al enviar la solicitud', err);
+        formError.hidden = false;
+      } finally {
         submitButton.disabled = false;
         submitLabel.textContent = 'Solicitar llamada →';
-      }, 600);
+      }
     });
 
     renderCalendar();
