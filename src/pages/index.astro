@@ -73,6 +73,7 @@ import Footer from '../components/Footer.astro';
       video.style.width = '100%';
       video.style.height = '100%';
       video.style.borderRadius = `${DOCK_RADIUS}px`;
+      video.style.zIndex = '';
       if (overlay) overlay.style.opacity = '0';
     };
 
@@ -86,6 +87,7 @@ import Footer from '../components/Footer.astro';
       video.style.width = '100%';
       video.style.height = '100%';
       video.style.borderRadius = '0';
+      video.style.zIndex = '';
       if (overlay) overlay.style.opacity = '0.42';
     };
 
