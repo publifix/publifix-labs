@@ -26,7 +26,8 @@ const altText = `${project.name} — proyecto de ${project.category.toLowerCase(
   data-full-src={project.fullSrc}
 >
   <span class="work-card__media">
-    <Image src={project.image} alt={altText} width={960} loading="lazy" />
+    <Image src={project.image} alt="" aria-hidden="true" width={640} loading="lazy" class="work-card__bg" />
+    <Image src={project.image} alt={altText} width={960} loading="lazy" class="work-card__fg" />
   </span>
   <span class="work-card__meta">{project.category} — {project.name}</span>
   <span class="work-card__explore">Explorar Proyecto →</span>
@@ -38,6 +39,7 @@ const altText = `${project.name} — proyecto de ${project.category.toLowerCase(
     flex-direction: column;
     gap: 0.9rem;
     width: 100%;
+    height: 100%;
     background: none;
     border: none;
     padding: 0;
@@ -51,24 +53,40 @@ const altText = `${project.name} — proyecto de ${project.category.toLowerCase(
   .work-card__media {
     position: relative;
     display: block;
-    aspect-ratio: 16 / 9;
+    flex: 1;
+    min-height: 0;
     border-radius: 22px;
     overflow: hidden;
+    background: var(--color-bg);
   }
 
-  .work-card__media :global(img) {
+  .work-card__media :global(.work-card__bg) {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: blur(30px) brightness(0.75) saturate(1.1);
+    transform: scale(1.25);
+  }
+
+  .work-card__media :global(.work-card__fg) {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 
   .work-card__meta {
+    flex-shrink: 0;
     font-size: 0.9375rem;
     font-weight: 600;
     letter-spacing: -0.005em;
   }
 
   .work-card__explore {
+    flex-shrink: 0;
     align-self: flex-start;
     display: inline-flex;
     align-items: center;

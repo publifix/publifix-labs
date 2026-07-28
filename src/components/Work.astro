@@ -60,29 +60,37 @@ const projects = await Promise.all(
   })
 );
 
-const slideCount = projects.length + 1; // +1 for the closing CTA slide
+const slideCount = projects.length + 2; // +1 headline slide, +1 closing CTA slide
 ---
 
 <section class="trabajo" id="trabajo" aria-labelledby="trabajo-heading" data-trabajo>
-  <div class="trabajo__intro">
-    <p class="trabajo__eyebrow">Trabajo</p>
-    <h2 class="trabajo__headline" id="trabajo-heading">Proyectos que ya están en producción.</h2>
-  </div>
-
   <div class="trabajo__stage" data-trabajo-stage>
     <div class="trabajo__track" data-trabajo-track>
+      <div class="trabajo__slide" data-trabajo-slide>
+        <div class="trabajo__slide-inner" data-trabajo-slide-inner>
+          <div class="trabajo__intro-card">
+            <p class="trabajo__eyebrow">Trabajo</p>
+            <h2 class="trabajo__headline" id="trabajo-heading">Proyectos que ya están en producción.</h2>
+          </div>
+        </div>
+      </div>
+
       {projects.map((project) => (
         <div class="trabajo__slide" data-trabajo-slide>
-          <WorkCard project={project} />
+          <div class="trabajo__slide-inner" data-trabajo-slide-inner>
+            <WorkCard project={project} />
+          </div>
         </div>
       ))}
 
       <div class="trabajo__slide" data-trabajo-slide>
-        <div class="trabajo__closing">
-          <p class="trabajo__closing-eyebrow">¿Y tu proyecto?</p>
-          <h3 class="trabajo__closing-headline">Tu proyecto podría ser el próximo.</h3>
-          <p class="trabajo__closing-subtext">Cuéntanos qué estás construyendo.</p>
-          <a href="#contacto" class="trabajo__closing-button">Iniciar proyecto</a>
+        <div class="trabajo__slide-inner" data-trabajo-slide-inner>
+          <div class="trabajo__closing">
+            <p class="trabajo__closing-eyebrow">¿Y tu proyecto?</p>
+            <h3 class="trabajo__closing-headline">Tu proyecto podría ser el próximo.</h3>
+            <p class="trabajo__closing-subtext">Cuéntanos qué estás construyendo.</p>
+            <a href="#contacto" class="trabajo__closing-button">Iniciar proyecto</a>
+          </div>
         </div>
       </div>
     </div>
@@ -116,9 +124,9 @@ const slideCount = projects.length + 1; // +1 for the closing CTA slide
 
 <style>
   .trabajo {
-    --card-width: clamp(280px, 56vw, 760px);
-    --slide-gap: clamp(2rem, 6vw, 5rem);
-    --slide-height: clamp(380px, 44vw, 540px);
+    --card-width: clamp(280px, 32vw, 420px);
+    --slide-gap: clamp(1.75rem, 5vw, 3.5rem);
+    --slide-height: clamp(420px, 60vh, 620px);
 
     position: relative;
     height: 100vh;
@@ -131,32 +139,6 @@ const slideCount = projects.length + 1; // +1 for the closing CTA slide
     scroll-margin-top: clamp(4.5rem, 10vw, 6rem);
   }
 
-  .trabajo__intro {
-    flex-shrink: 0;
-    max-width: 60rem;
-    padding: clamp(6rem, 11vw, 8rem) clamp(1.5rem, 6vw, 4rem) clamp(1.25rem, 2.5vw, 1.75rem);
-  }
-
-  .trabajo__eyebrow {
-    margin: 0 0 0.9rem;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    opacity: 0.6;
-  }
-
-  .trabajo__headline {
-    margin: 0;
-    max-width: 22ch;
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: clamp(1.75rem, 3.6vw, 2.75rem);
-    line-height: 1.15;
-    letter-spacing: -0.015em;
-    text-wrap: balance;
-  }
-
   .trabajo__stage {
     position: relative;
     flex: 1;
@@ -166,7 +148,6 @@ const slideCount = projects.length + 1; // +1 for the closing CTA slide
 
   .trabajo__track {
     display: flex;
-    align-items: center;
     height: 100%;
     padding-left: calc((100vw - var(--card-width)) / 2);
     padding-right: calc((100vw - var(--card-width)) / 2);
@@ -177,8 +158,10 @@ const slideCount = projects.length + 1; // +1 for the closing CTA slide
     position: relative;
     flex: 0 0 var(--card-width);
     width: var(--card-width);
-    height: var(--slide-height);
-    will-change: transform;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .trabajo__slide:not(:last-child)::after {
@@ -187,8 +170,8 @@ const slideCount = projects.length + 1; // +1 for the closing CTA slide
     top: 0;
     bottom: 0;
     right: calc(var(--slide-gap) / -2);
-    width: 2px;
-    background: var(--color-bg);
+    width: 1px;
+    background: rgba(58, 56, 43, 0.18);
     pointer-events: none;
   }
 
@@ -196,12 +179,41 @@ const slideCount = projects.length + 1; // +1 for the closing CTA slide
     margin-left: var(--slide-gap);
   }
 
-  .trabajo__slide :global(.work-card) {
+  .trabajo__slide-inner {
+    width: 100%;
+    height: var(--slide-height);
+    will-change: transform;
+  }
+
+  .trabajo__slide-inner :global(.work-card) {
     height: 100%;
   }
 
-  .trabajo__slide :global(.work-card__media) {
-    height: calc(100% - 5.5rem);
+  .trabajo__intro-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.9rem;
+    height: 100%;
+  }
+
+  .trabajo__eyebrow {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .trabajo__headline {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
   }
 
   /* Closing CTA slide — inverted palette so it reads as the carousel's close */
@@ -271,7 +283,7 @@ const slideCount = projects.length + 1; // +1 for the closing CTA slide
     justify-content: center;
     flex-wrap: wrap;
     gap: 0.625rem;
-    padding: clamp(1.25rem, 3vw, 2rem) 1.5rem clamp(2rem, 4vw, 3rem);
+    padding: clamp(1rem, 2.5vw, 1.5rem) 1.5rem;
   }
 
   .trabajo__dot {
@@ -302,14 +314,22 @@ const slideCount = projects.length + 1; // +1 for the closing CTA slide
   .trabajo.is-static .trabajo__track {
     flex-direction: column;
     height: auto;
-    padding: 0 clamp(1.5rem, 6vw, 4rem);
+    padding: clamp(4rem, 10vw, 6rem) clamp(1.5rem, 6vw, 4rem) 0;
     gap: clamp(2.5rem, 6vw, 3.5rem);
   }
 
   .trabajo.is-static .trabajo__slide {
     width: 100%;
+    height: auto;
+  }
+
+  .trabajo.is-static .trabajo__slide-inner {
     height: clamp(360px, 90vw, 460px);
     transform: none !important;
+  }
+
+  .trabajo.is-static .trabajo__intro-card {
+    height: auto;
   }
 
   .trabajo.is-static .trabajo__slide + .trabajo__slide {
@@ -453,19 +473,19 @@ const slideCount = projects.length + 1; // +1 for the closing CTA slide
   const section = document.querySelector<HTMLElement>('[data-trabajo]');
   const track = document.querySelector<HTMLElement>('[data-trabajo-track]');
   const slides = Array.from(document.querySelectorAll<HTMLElement>('[data-trabajo-slide]'));
+  const slideInners = Array.from(document.querySelectorAll<HTMLElement>('[data-trabajo-slide-inner]'));
   const dots = Array.from(document.querySelectorAll<HTMLElement>('[data-trabajo-dot]'));
 
-  const MAX_Y_OFFSET = 64; // px a slide sits below its resting position while off-center
-
-  if (section && track && slides.length) {
+  if (section && track && slides.length && slideInners.length === slides.length) {
     if (prefersReducedMotion || isCompactViewport) {
       section.classList.add('is-static');
     } else {
-      let step = 0; // px between two consecutive slide centers, in untransformed layout
+      let positions: number[] = []; // each slide's untransformed offsetLeft
+      let maxYOffset = 0; // px a slide sits below its resting position while off-center
 
       const measure = () => {
-        if (slides.length < 2) return;
-        step = slides[1].offsetLeft - slides[0].offsetLeft;
+        positions = slides.map((slide) => slide.offsetLeft);
+        maxYOffset = slideInners[0].offsetHeight * 0.62;
       };
 
       measure();
@@ -481,11 +501,16 @@ const slideCount = projects.length + 1; // +1 for the closing CTA slide
         onRefresh: measure,
         onUpdate(self) {
           const currentIndex = self.progress * (slides.length - 1);
-          gsap.set(track, { x: -currentIndex * step });
+          const i0 = Math.floor(currentIndex);
+          const i1 = Math.min(slides.length - 1, i0 + 1);
+          const localT = currentIndex - i0;
+          const currentX = positions[i0] + (positions[i1] - positions[i0]) * localT;
 
-          slides.forEach((slide, i) => {
+          gsap.set(track, { x: -currentX });
+
+          slides.forEach((_, i) => {
             const distance = Math.min(1, Math.abs(i - currentIndex));
-            gsap.set(slide, { y: distance * MAX_Y_OFFSET });
+            gsap.set(slideInners[i], { y: distance * maxYOffset });
           });
 
           const activeIndex = Math.min(slides.length - 1, Math.round(currentIndex));
