@@ -1,5 +1,10 @@
 ---
+import { getImage } from 'astro:assets';
 import heroVideoSrc from '../assets/video/hero-background.mp4';
+import heroVideoWebm from '../assets/video/hero-background.webm';
+import heroPosterSource from '../assets/video/hero-poster.png';
+
+const heroPoster = await getImage({ src: heroPosterSource, width: 1152, format: 'webp' });
 
 const line1 = 'No vendemos inteligencia artificial.'.split(' ');
 const line2 = 'Vendemos resultados que la usan bien.'.split(' ');
@@ -17,7 +22,10 @@ let wordIndex = 0;
       loop
       playsinline
       preload="auto"
+      poster={heroPoster.src}
+      aria-hidden="true"
     >
+      <source src={heroVideoWebm} type="video/webm" />
       <source src={heroVideoSrc} type="video/mp4" />
     </video>
     <div class="hero__overlay" data-hero-overlay></div>

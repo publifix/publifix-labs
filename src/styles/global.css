@@ -1,7 +1,12 @@
-/* Space Grotesk — self-hosted, no Google Fonts */
+/* Space Grotesk — self-hosted, no Google Fonts. All 5 weights are in
+   active use across the site (300 in the footer, 700 in Insight's stat
+   callout, 400/500/600 throughout), so none were dropped — woff2 (with
+   ttf as a legacy fallback) cuts transfer size by ~64% per weight
+   instead. */
 @font-face {
   font-family: 'Space Grotesk';
-  src: url('../fonts/SpaceGrotesk-Light.ttf') format('truetype');
+  src: url('../fonts/SpaceGrotesk-Light.woff2') format('woff2'),
+    url('../fonts/SpaceGrotesk-Light.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -9,7 +14,8 @@
 
 @font-face {
   font-family: 'Space Grotesk';
-  src: url('../fonts/SpaceGrotesk-Regular.ttf') format('truetype');
+  src: url('../fonts/SpaceGrotesk-Regular.woff2') format('woff2'),
+    url('../fonts/SpaceGrotesk-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -17,7 +23,8 @@
 
 @font-face {
   font-family: 'Space Grotesk';
-  src: url('../fonts/SpaceGrotesk-Medium.ttf') format('truetype');
+  src: url('../fonts/SpaceGrotesk-Medium.woff2') format('woff2'),
+    url('../fonts/SpaceGrotesk-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -25,7 +32,8 @@
 
 @font-face {
   font-family: 'Space Grotesk';
-  src: url('../fonts/SpaceGrotesk-SemiBold.ttf') format('truetype');
+  src: url('../fonts/SpaceGrotesk-SemiBold.woff2') format('woff2'),
+    url('../fonts/SpaceGrotesk-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -33,7 +41,8 @@
 
 @font-face {
   font-family: 'Space Grotesk';
-  src: url('../fonts/SpaceGrotesk-Bold.ttf') format('truetype');
+  src: url('../fonts/SpaceGrotesk-Bold.woff2') format('woff2'),
+    url('../fonts/SpaceGrotesk-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;

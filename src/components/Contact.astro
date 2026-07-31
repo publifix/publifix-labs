@@ -37,7 +37,7 @@ const timeSlots = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00'];
           <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
         </div>
 
-        <div class="contacto__days" data-cal-grid role="grid" aria-label="Selecciona un día"></div>
+        <div class="contacto__days" data-cal-grid role="group" aria-label="Selecciona un día"></div>
 
         <div class="contacto__slots" data-slots hidden>
           <p class="contacto__slots-label">Horarios disponibles</p>
@@ -151,7 +151,10 @@ const timeSlots = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00'];
     font-weight: 600;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    opacity: 0.6;
+    /* 0.7, not the 0.6 used elsewhere — this sits dark-on-light (unlike
+       most eyebrows, which are light-on-dark), so it needs more opacity
+       to clear the same 4.5:1 contrast minimum. */
+    opacity: 0.7;
   }
 
   .contacto__headline {
@@ -276,7 +279,7 @@ const timeSlots = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00'];
     text-align: center;
     font-size: 0.75rem;
     font-weight: 600;
-    opacity: 0.5;
+    opacity: 0.6;
     padding-bottom: 0.4rem;
   }
 
@@ -621,7 +624,7 @@ const timeSlots = ['09:00', '10:00', '11:00', '12:00', '16:00', '17:00'];
         if (selectedDate && isSameDay(date, selectedDate)) {
           btn.classList.add('is-selected');
         }
-        btn.setAttribute('aria-label', `${day} de ${MONTH_NAMES[month]}`);
+        btn.setAttribute('aria-label', `${day} de ${MONTH_NAMES[month]} de ${year}`);
 
         btn.addEventListener('click', () => {
           selectedDate = date;

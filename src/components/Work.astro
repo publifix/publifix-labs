@@ -56,7 +56,7 @@ const rawProjects = [
 const projects = await Promise.all(
   rawProjects.map(async (project) => {
     const full = await getImage({ src: project.image, width: 1400 });
-    return { ...project, fullSrc: full.src };
+    return { ...project, fullSrc: full.src, fullWidth: full.attributes.width, fullHeight: full.attributes.height };
   })
 );
 
@@ -201,7 +201,9 @@ const slideCount = projects.length + 2; // +1 headline slide, +1 closing CTA sli
     font-weight: 600;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    opacity: 0.6;
+    /* Dark text on this slide's light background needs more opacity than
+       the light-on-dark eyebrow on the closing CTA slide below. */
+    opacity: 0.7;
   }
 
   .trabajo__headline {
@@ -561,8 +563,14 @@ const slideCount = projects.length + 2; // +1 headline slide, +1 closing CTA sli
 
     const openLightbox = (card: HTMLButtonElement) => {
       lastFocused = card;
-      const { name = '', category = '', description = '', fullSrc = '' } = card.dataset;
+      const { name = '', category = '', description = '', fullSrc = '', fullWidth = '', fullHeight = '' } = card.dataset;
 
+      // Set intrinsic dimensions before src so the browser reserves the
+      // correct space immediately (via the width/height aspect ratio),
+      // instead of collapsing to 0 height until the image decodes — this
+      // prevents a layout shift each time a different project is opened.
+      imageEl.width = Number(fullWidth);
+      imageEl.height = Number(fullHeight);
       imageEl.src = fullSrc;
       imageEl.alt = `${name} — proyecto de ${category.toLowerCase().replace('ia', 'IA')} desarrollado por Publifix Labs`;
       nameEl.textContent = name;

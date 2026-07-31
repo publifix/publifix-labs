@@ -9,6 +9,8 @@ interface Props {
     description: string;
     image: ImageMetadata;
     fullSrc: string;
+    fullWidth: number;
+    fullHeight: number;
   };
 }
 
@@ -24,6 +26,8 @@ const altText = `${project.name} — proyecto de ${project.category.toLowerCase(
   data-category={project.category}
   data-description={project.description}
   data-full-src={project.fullSrc}
+  data-full-width={project.fullWidth}
+  data-full-height={project.fullHeight}
 >
   <span class="work-card__media">
     <Image src={project.image} alt="" aria-hidden="true" width={640} loading="lazy" class="work-card__bg" />
